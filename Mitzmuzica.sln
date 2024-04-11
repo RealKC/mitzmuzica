@@ -3,7 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MitzMuzica", "MitzMuzica\MitzMuzica.csproj", "{9B1AA9AF-D92A-4639-99C3-08529482C5CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MitzMuzica.Desktop", "MitzMuzica.Desktop\MitzMuzica.Desktop.csproj", "{57BBBAE6-8BC9-4322-99C5-685E2B2DD1EE}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B1AA9AF-D92A-4639-99C3-08529482C5CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B1AA9AF-D92A-4639-99C3-08529482C5CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B1AA9AF-D92A-4639-99C3-08529482C5CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B1AA9AF-D92A-4639-99C3-08529482C5CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57BBBAE6-8BC9-4322-99C5-685E2B2DD1EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57BBBAE6-8BC9-4322-99C5-685E2B2DD1EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57BBBAE6-8BC9-4322-99C5-685E2B2DD1EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57BBBAE6-8BC9-4322-99C5-685E2B2DD1EE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
