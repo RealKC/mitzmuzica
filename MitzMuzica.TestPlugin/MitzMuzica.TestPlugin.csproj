@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MitzMuzica.PluginAPI\MitzMuzica.PluginAPI.csproj">
+      <Private>false</Private>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+  <Target Name="CopyPlugin" AfterTargets="AfterBuild">
+    <MakeDir Directories="$(ProjectDir)\..\MitzMuzica.PluginLoaderTest\bin\Debug\net7.0\Plugins\"/>
+    <Copy
+      SourceFiles="$(TargetDir)\MitzMuzica.TestPlugin.dll"
+      DestinationFolder="$(ProjectDir)\..\MitzMuzica.PluginLoaderTest\bin\Debug\net7.0\Plugins\"
+    />
+  </Target>
+
+</Project>
