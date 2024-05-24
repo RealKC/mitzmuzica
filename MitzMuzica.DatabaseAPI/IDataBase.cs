@@ -10,12 +10,11 @@ public interface IDatabase
 
     public void EstablishConnection(string path) { }
 
-    public void InsertNewSong(IAudioFile song);
+    public void InsertNewSong(string title, string path);
     
     public (int, string, string) GetSong(int songId);
     
     public void DeleteSong(string songId);
-    
     
     public void InsertNewPlaylist(IPlaylist playlist);
     
