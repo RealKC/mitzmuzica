@@ -25,4 +25,12 @@ public class DatabaseTests
                       && title == "Cantecul bobi dog"
                       && path == "penis", $"Valorile gasite sunt: {songId}, {title}, {path}");
     }
+    
+    [Test]
+    public void TestInsertNewSong()
+    {
+        string title = "Paco", path = "taco 2 3";
+
+        db.InsertNewSong(title, path);
+    }
 }
