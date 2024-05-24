@@ -4,22 +4,22 @@ using MitzMuzica.PluginAPI;
 
 namespace MitzMuzica.DatabaseAPI;
 
-public interface IDataBase
+public interface IDatabase
 {
-    public SQLiteConnection Connection { get; }
+    private static SQLiteConnection? _connection = null;
 
-    public void EstablishConnection(); 
-    
-    public IAudioFile GetSong(string songId);
+    public void EstablishConnection(string path) { }
 
     public void InsertNewSong(IAudioFile song);
     
+    public (int, string, string) GetSong(int songId);
+    
     public void DeleteSong(string songId);
     
-
-    public IPlaylist GetPlaylist(string playlistId);
     
     public void InsertNewPlaylist(IPlaylist playlist);
-
+    
+    public IPlaylist GetPlaylist(string playlistId);
+    
     public void DeletePlaylist(string playlist);
 }
