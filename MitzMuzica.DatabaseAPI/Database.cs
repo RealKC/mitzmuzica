@@ -15,9 +15,33 @@ public sealed class Database : IDatabase
         _connection ??= new SQLiteConnection($"Data Source={path};Version=3;");
     }
 
-    public void InsertNewSong(IAudioFile song)
+    public void InsertNewSong(string title, string path)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _connection.Open();
+            string query = "INSERT INTO songs(title, path) VALUES (@title, @path)";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.Parameters.AddWithValue("@title", title);
+                command.Parameters.AddWithValue("@path", path);
+                command.ExecuteNonQuery();
+            }
+
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            if (ex.Message.Contains("UNIQUE constraint failed"))
+            {
+                throw new Exception($"\nValori duplicate!\nTitle: \"{title}\", Path: \"{path}\" exista deja in databse");
+            }
+            else
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
     
     public (int, string, string) GetSong(int songId)
@@ -46,6 +70,7 @@ public sealed class Database : IDatabase
                     }
                 }
             }
+            _connection.Close();
         }
         catch (SQLiteException ex)
         {
