@@ -9,7 +9,6 @@ public sealed class Database : IDatabase
 
     public Database()
     {
-        CreateDatabase();
     }
 
     public void CreateDatabase()
@@ -17,6 +16,10 @@ public sealed class Database : IDatabase
         try
         {
             string path = "..\\..\\..\\..\\MitzMuzica\\Resources\\playlistsDB.db";
+            if (File.Exists(path))
+            {
+                return;
+            }
             SQLiteConnection.CreateFile(path);
             EstablishConnection(path);
             
@@ -54,7 +57,6 @@ public sealed class Database : IDatabase
         {
             throw new Exception(ex.Message);
         }
-
     }
 
     public void EstablishConnection(string path)
@@ -68,6 +70,7 @@ public sealed class Database : IDatabase
         try
         {
             _connection.Open();
+            
             string query = "INSERT INTO songs(title, path) VALUES (@title, @path)";
 
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
@@ -92,11 +95,9 @@ public sealed class Database : IDatabase
         }
     }
     
-    public (int, string, string) GetSong(int songId)
+    public string GetSongPath(int songId)
     {
-        string title = "";
         string path = "";
-
         try
         {
             _connection.Open();
@@ -108,7 +109,6 @@ public sealed class Database : IDatabase
                 {
                     while (reader.Read())
                     {
-                        title = reader.GetString(reader.GetOrdinal("title"));
                         path = reader.GetString(reader.GetOrdinal("path"));
                     }
                 }
@@ -120,7 +120,7 @@ public sealed class Database : IDatabase
             throw new Exception(ex.Message);
         }
 
-        return (songId, title, path);
+        return path;
     }
     
     public int GetSongID(string title)
@@ -171,12 +171,35 @@ public sealed class Database : IDatabase
         }
     }
 
-    public int GetPlaylist(string playlistId)
+    public List<int> GetPlaylist(int playlistId)
     {
-        throw new NotImplementedException();
+        List<int> results = new List<int>();
+        try
+        {
+            _connection.Open();
+            string query = $"SELECT s_id FROM play_queue WHERE p_id = {playlistId}";
+    
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        results.Add(reader.GetInt32(reader.GetOrdinal("s_id")));
+                    }
+                }
+            }
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    
+        return results;
     }
 
-    public void InsertNewPlaylist(string name, int[] songIds)
+    public int InsertNewPlaylist(string name, int[] songIds)
     {
         try
         {
@@ -203,6 +226,7 @@ public sealed class Database : IDatabase
             }
             
             _connection.Close();
+            return p_id;
         }
         catch (SQLiteException ex)
         {
@@ -217,7 +241,7 @@ public sealed class Database : IDatabase
         }
     }
 
-    public void DeletePlaylist(int p_id)
+    public void DeletePlaylist(int playlistId)
     {
         throw new NotImplementedException();
     }
