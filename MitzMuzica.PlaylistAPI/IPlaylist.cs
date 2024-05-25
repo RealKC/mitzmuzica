@@ -2,9 +2,7 @@
 
 public interface IPlaylist
 {
-    public int PlaylistId { get; }
-    
-    public int PlaylistName { get; }
+    public string PlaylistName { get; }
 
-    
+    public void CreatePlaylist(int[] songIds);
 }

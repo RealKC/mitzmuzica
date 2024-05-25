@@ -1,5 +1,4 @@
-﻿using MitzMuzica.PlaylistAPI;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 using MitzMuzica.PluginAPI;
 
 namespace MitzMuzica.DatabaseAPI;
@@ -17,10 +16,10 @@ public interface IDatabase
     public int GetSongID(string title);
     
     public void DeleteSong(int songId);
-    
-    public void InsertNewPlaylist(IPlaylist playlist);
-    
-    public IPlaylist GetPlaylist(string playlistId);
-    
-    public void DeletePlaylist(string playlist);
+
+    public void InsertNewPlaylist(string name, int[] songIds);
+
+    public int GetPlaylist(string playlistId);
+
+    public void DeletePlaylist(int p_id);
 }

@@ -11,7 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MitzMuzica.PlaylistAPI\MitzMuzica.PlaylistAPI.csproj" />
       <ProjectReference Include="..\MitzMuzica.PluginAPI\MitzMuzica.PluginAPI.csproj" />
     </ItemGroup>
 
