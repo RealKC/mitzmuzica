@@ -6,8 +6,56 @@ namespace MitzMuzica.DatabaseAPI;
 public sealed class Database : IDatabase
 {
     private static SQLiteConnection? _connection;
-    
-    public Database(){ }
+
+    public Database()
+    {
+        CreateDatabase();
+    }
+
+    public void CreateDatabase()
+    {
+        try
+        {
+            string path = "..\\..\\..\\..\\MitzMuzica\\Resources\\playlistsDB.db";
+            SQLiteConnection.CreateFile(path);
+            EstablishConnection(path);
+            
+            _connection.Open();
+
+            string query = @"CREATE TABLE songs (
+                                s_id  INTEGER PRIMARY KEY ASC AUTOINCREMENT,
+                                title TEXT    NOT NULL
+                                              UNIQUE,
+                                path  TEXT    NOT NULL
+                                              UNIQUE
+                            );
+
+                            CREATE TABLE playlists (
+                                p_id INTEGER PRIMARY KEY ASC AUTOINCREMENT,
+                                name TEXT    UNIQUE
+                                             NOT NULL
+                            );
+                            
+                            CREATE TABLE play_queue (
+                                p_id INTEGER REFERENCES playlists (p_id) ON DELETE CASCADE
+                                                                         ON UPDATE CASCADE,
+                                s_id INTEGER REFERENCES songs (s_id) ON DELETE CASCADE
+                                                                     ON UPDATE CASCADE
+                            );";
+            
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.ExecuteNonQuery();
+            }
+            
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+    }
 
     public void EstablishConnection(string path)
     {
@@ -16,6 +64,7 @@ public sealed class Database : IDatabase
 
     public void InsertNewSong(string title, string path)
     {
+        // TO DO: Add return id on inserting
         try
         {
             _connection.Open();
@@ -133,26 +182,12 @@ public sealed class Database : IDatabase
         {
             int p_id = 0;
             _connection.Open();
-            string query = "INSERT INTO playlists(name) VALUES (@name)";
+            string query = "INSERT INTO playlists(name) VALUES (@name) RETURNING p_id";
 
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
                 command.Parameters.AddWithValue("@name", name);
-                command.ExecuteNonQuery();
-            }
-            
-            query = "SELECT p_id FROM playlists WHERE name=@name";
-            
-            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
-            {
-                command.Parameters.AddWithValue("@name", name);
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        p_id = reader.GetInt32(reader.GetOrdinal("p_id"));
-                    }
-                }
+                p_id = Convert.ToInt32(command.ExecuteScalar());
             }
             
             foreach (var songId in songIds)

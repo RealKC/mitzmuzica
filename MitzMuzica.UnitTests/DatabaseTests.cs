@@ -6,13 +6,6 @@ public class DatabaseTests
 {
     IDatabase db = new Database();
 
-    [SetUp]
-    public void Setup()
-    {
-        string path = "..\\..\\..\\..\\MitzMuzica\\Resources\\playlistsDB.db";
-        db.EstablishConnection(path);
-    }
-
     [Test]
     public void TestGetSong()
     {

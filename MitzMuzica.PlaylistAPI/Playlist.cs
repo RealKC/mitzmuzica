@@ -15,7 +15,6 @@ public class Playlist : IPlaylist
     public void CreatePlaylist(int[] songIds)
     {
         IDatabase db = new Database();
-        db.EstablishConnection("..\\..\\..\\..\\MitzMuzica\\Resources\\playlistsDB.db");
         db.InsertNewPlaylist(PlaylistName, songIds);
     }
 }
