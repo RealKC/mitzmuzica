@@ -9,7 +9,7 @@ public class DatabaseTests
     [SetUp]
     public void Setup()
     {
-        string path = "E:\\AC\\IP\\mitzmuzica\\MitzMuzica\\Resources\\playlistsDB.db";
+        string path = "..\\..\\..\\..\\MitzMuzica\\Resources\\playlistsDB.db";
         db.EstablishConnection(path);
     }
 
@@ -23,14 +23,23 @@ public class DatabaseTests
         
         Assert.IsTrue(songId == 1 
                       && title == "Cantecul bobi dog"
-                      && path == "penis", $"Valorile gasite sunt: {songId}, {title}, {path}");
+                      && path == "denis", 
+                      $"Valorile gasite sunt: ID: {songId}, Title: {title}, Path: {path}");
     }
     
     [Test]
     public void TestInsertNewSong()
     {
-        string title = "Paco", path = "taco 2 3";
+        string title = "Pacod", path = "225200";
 
         db.InsertNewSong(title, path);
+    }
+    
+    [Test]
+    public void TestDeleteSong()
+    {
+        int s_id = db.GetSongID("Pacod");
+
+        db.DeleteSong(s_id);
     }
 }

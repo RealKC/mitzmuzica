@@ -13,8 +13,10 @@ public interface IDatabase
     public void InsertNewSong(string title, string path);
     
     public (int, string, string) GetSong(int songId);
+
+    public int GetSongID(string title);
     
-    public void DeleteSong(string songId);
+    public void DeleteSong(int songId);
     
     public void InsertNewPlaylist(IPlaylist playlist);
     

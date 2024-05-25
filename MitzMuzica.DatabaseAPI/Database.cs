@@ -46,7 +46,6 @@ public sealed class Database : IDatabase
     
     public (int, string, string) GetSong(int songId)
     {
-        int id = 0;
         string title = "";
         string path = "";
 
@@ -61,12 +60,8 @@ public sealed class Database : IDatabase
                 {
                     while (reader.Read())
                     {
-                        id = reader.GetInt32(reader.GetOrdinal("s_id"));
                         title = reader.GetString(reader.GetOrdinal("title"));
                         path = reader.GetString(reader.GetOrdinal("path"));
-                        
-                        Console.WriteLine($"ID: {id}, Title: {title}, Path: {path}");
-
                     }
                 }
             }
@@ -77,12 +72,55 @@ public sealed class Database : IDatabase
             throw new Exception(ex.Message);
         }
 
-        return (id, title, path);
+        return (songId, title, path);
+    }
+    
+    public int GetSongID(string title)
+    {
+        int s_id = 0;
+        try
+        {
+            _connection.Open();
+            string query = "SELECT * FROM songs WHERE title = @title";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.Parameters.AddWithValue("@title", title);
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        s_id = reader.GetInt32(reader.GetOrdinal("s_id"));
+                    }
+                }
+            }
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+        return s_id;
     }
 
-    public void DeleteSong(string songId)
+    public void DeleteSong(int songId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _connection.Open();
+            string query = $"DELETE FROM songs WHERE s_id = {songId}";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.ExecuteNonQuery();
+            }
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
     public IPlaylist GetPlaylist(string playlistId)
