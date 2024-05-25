@@ -5,9 +5,9 @@ namespace MitzMuzica.UnitTests;
 public class PlaylistTests
 {
     [Test]
-    public void TestDeleteSong()
+    public void TestCreatePlaylist()
     {
-        IPlaylist playlist = new Playlist("bobi5");
+        IPlaylist playlist = new Playlist("bobi10");
         int[] songlist = { 1, 2, 3 };
         playlist.CreatePlaylist(songlist);
     }

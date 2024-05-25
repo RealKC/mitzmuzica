@@ -7,6 +7,7 @@ public interface IDatabase
 {
     private static SQLiteConnection? _connection = null;
 
+    public void CreateDatabase();
     public void EstablishConnection(string path) { }
 
     public void InsertNewSong(string title, string path);
