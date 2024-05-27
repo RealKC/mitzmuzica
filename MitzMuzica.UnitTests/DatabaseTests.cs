@@ -108,6 +108,7 @@ public class DatabaseTests
         Assert.IsTrue(songId == 1, 
             $"Valorile gasite sunt: Path: {songTitle}");
     }
+    
     [Test]
     public void Test4GetSongIdentifierInvalidTitle()
     {
