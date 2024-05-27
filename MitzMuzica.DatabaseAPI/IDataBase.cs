@@ -3,6 +3,9 @@ using MitzMuzica.PluginAPI;
 
 namespace MitzMuzica.DatabaseAPI;
 
+/// <summary>
+/// Interface for interacting with the database to manage songs and playlists.
+/// </summary>
 public interface IDatabase
 {
     private static SQLiteConnection? _connection = null;
