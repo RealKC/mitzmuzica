@@ -7,9 +7,7 @@ public sealed class Database : IDatabase
 {
     private static SQLiteConnection? _connection;
 
-    public Database()
-    {
-    }
+    public Database() { }
 
     public void CreateDatabase()
     {
@@ -26,7 +24,7 @@ public sealed class Database : IDatabase
             
             _connection.Open();
 
-            string query = @"CREATE TABLE songs (
+            string query = @"CREATE TABLE IF NOT EXISTS songs (
                                 s_id  INTEGER PRIMARY KEY ASC AUTOINCREMENT,
                                 title TEXT    NOT NULL
                                               UNIQUE,
@@ -34,13 +32,13 @@ public sealed class Database : IDatabase
                                               UNIQUE
                             );
 
-                            CREATE TABLE playlists (
+                            CREATE TABLE IF NOT EXISTS playlists (
                                 p_id INTEGER PRIMARY KEY ASC AUTOINCREMENT,
                                 name TEXT    UNIQUE
                                              NOT NULL
                             );
                             
-                            CREATE TABLE play_queue (
+                            CREATE TABLE IF NOT EXISTS play_queue (
                                 p_id INTEGER REFERENCES playlists (p_id) ON DELETE CASCADE
                                                                          ON UPDATE CASCADE,
                                 s_id INTEGER REFERENCES songs (s_id) ON DELETE CASCADE
@@ -96,16 +94,17 @@ public sealed class Database : IDatabase
         }
     }
     
-    public string GetSongPath(int songId)
+    public string GetSongPath(int s_id)
     {
         string path = "";
         try
         {
             _connection.Open();
-            string query = $"SELECT * FROM songs WHERE s_id = {songId}";
+            string query = "SELECT * FROM songs WHERE s_id = @s_id";
 
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
+                command.Parameters.AddWithValue("@s_id", s_id);
                 using (SQLiteDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -121,6 +120,37 @@ public sealed class Database : IDatabase
             throw new Exception(ex.Message);
         }
 
+        return path;
+    }
+    
+    public string GetSongPath(string title)
+    {
+        string path = "";
+        int s_id = 0;
+        try
+        {
+            _connection.Open();
+            string query = "SELECT s_id FROM songs WHERE title = @title";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.Parameters.AddWithValue("@title", title);
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        s_id = reader.GetInt32(reader.GetOrdinal("s_id"));
+                    }
+                }
+            }
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+        path = GetSongPath(s_id);
         return path;
     }
     
@@ -153,15 +183,16 @@ public sealed class Database : IDatabase
         return s_id;
     }
 
-    public void DeleteSong(int songId)
+    public void DeleteSong(int s_id)
     {
         try
         {
             _connection.Open();
-            string query = $"DELETE FROM songs WHERE s_id = {songId}";
+            string query = "DELETE FROM songs WHERE s_id = @s_id";
 
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
+                command.Parameters.AddWithValue("@s_id", s_id);
                 command.ExecuteNonQuery();
             }
             _connection.Close();
@@ -171,17 +202,35 @@ public sealed class Database : IDatabase
             throw new Exception(ex.Message);
         }
     }
-
-    public List<int> GetPlaylist(int playlistId)
+    public void DeleteSong(string title)
+    {
+        try
+        {
+            _connection.Open();
+            string query = $"DELETE FROM songs WHERE title = @title";
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.Parameters.AddWithValue("@title", title);
+                command.ExecuteNonQuery();
+            }
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+    public List<int> GetPlaylist(int p_id)
     {
         List<int> results = new List<int>();
         try
         {
             _connection.Open();
-            string query = $"SELECT s_id FROM play_queue WHERE p_id = {playlistId}";
+            string query = "SELECT s_id FROM play_queue WHERE p_id=@p_id";
     
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
+                command.Parameters.AddWithValue("@p_id", p_id);
                 using (SQLiteDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -197,6 +246,38 @@ public sealed class Database : IDatabase
             throw new Exception(ex.Message);
         }
     
+        return results;
+    }
+    
+    public List<int> GetPlaylist(string name)
+    {
+        List<int> results = new List<int>();
+        int p_id = 0;
+        try
+        {
+            _connection.Open();
+            string query = "SELECT p_id FROM playlists WHERE name = @name";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.Parameters.AddWithValue("@name", name);
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        p_id = reader.GetInt32(reader.GetOrdinal("p_id"));
+                    }
+                }
+            }
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    
+        results = GetPlaylist(p_id);
+
         return results;
     }
 
