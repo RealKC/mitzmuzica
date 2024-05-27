@@ -9,10 +9,21 @@ public class AudioPlayerFile : IAudioFile
     private string _title;
     private string _author;
     private long _length;
+    private long _currentTime = 0;
+    
     private MediaPlayerSingleton _mediaPlayer;
     private Media _media;
+    /// <summary>
+    /// Returns the title of the file if it exists otherwise return "unknown"
+    /// </summary>
     public string Title { get { return _title; } }
+    /// <summary>
+    /// Returns the author of the file if it exists otherwise return "unknown"
+    /// </summary>
     public string Author { get { return _author; } }
+    /// <summary>
+    /// Returns the length of the file returns -1 if the length cant be determined from metadata
+    /// </summary>
     public long Length { get { return _length; } }
     
     /// <summary>
@@ -44,10 +55,13 @@ public class AudioPlayerFile : IAudioFile
     /// </summary>
     public void Start()
     {
-        //stop any tracks already playing
-        _mediaPlayer._player.Stop();
-        //start media player
-        _mediaPlayer._player.Play(_media);
+        //start a thread playing the song
+        Task.Run(() =>
+        {
+            _mediaPlayer._player.Play(_media);
+            //set the player time to _currentTime
+            SeekTo(_currentTime);
+        });
     }
 
     /// <summary>
@@ -55,8 +69,11 @@ public class AudioPlayerFile : IAudioFile
     /// </summary>
     public void Stop()
     {
-        //stop media playerul
+        //save the time at witch the media is paused
+        _currentTime =  _mediaPlayer._player.Time;
+        //pause media player
         _mediaPlayer._player.Pause();
+
     }
     
     /// <summary>
@@ -65,8 +82,9 @@ public class AudioPlayerFile : IAudioFile
     /// <param name="s">Timestamp in milliseconds</param>
     public void SeekTo(long s)
     {
+ 
         //sets the time of the currently playing track to s milliseconds
-        if (s <= _length && s >= 0)
+        if (s >= 0)
         {
             _mediaPlayer._player.Time = s;
         }
