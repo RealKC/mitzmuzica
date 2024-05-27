@@ -18,6 +18,7 @@ public sealed class Database : IDatabase
             string path = "..\\..\\..\\..\\MitzMuzica\\Resources\\playlistsDB.db";
             if (File.Exists(path))
             {
+                EstablishConnection(path);
                 return;
             }
             SQLiteConnection.CreateFile(path);
@@ -61,7 +62,7 @@ public sealed class Database : IDatabase
 
     public void EstablishConnection(string path)
     {
-        _connection ??= new SQLiteConnection($"Data Source={path};Version=3;");
+        _connection ??= new SQLiteConnection($"Data Source={path};foreign keys=true");
     }
 
     public void InsertNewSong(string title, string path)
@@ -199,32 +200,35 @@ public sealed class Database : IDatabase
         return results;
     }
 
-    public int InsertNewPlaylist(string name, int[] songIds)
+    public int InsertNewPlaylist(string name, List<int> songIds)
     {
         try
         {
             int p_id = 0;
             _connection.Open();
-            string query = "INSERT INTO playlists(name) VALUES (@name) RETURNING p_id";
+            using (SQLiteTransaction transaction = _connection.BeginTransaction())
+            {
+                string query = "INSERT INTO playlists(name) VALUES (@name) RETURNING p_id";
 
-            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
-            {
-                command.Parameters.AddWithValue("@name", name);
-                p_id = Convert.ToInt32(command.ExecuteScalar());
-            }
-            
-            foreach (var songId in songIds)
-            {
-                query = "INSERT INTO play_queue(p_id, s_id) VALUES (@p_id, @songId)";
-                using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+                using (SQLiteCommand command = new SQLiteCommand(query, _connection, transaction))
                 {
-                    command.Parameters.AddWithValue("@p_id", p_id);
-                    command.Parameters.AddWithValue("@songId", songId);
-
-                    command.ExecuteNonQuery();
+                    command.Parameters.AddWithValue("@name", name);
+                    p_id = Convert.ToInt32(command.ExecuteScalar());
                 }
-            }
             
+                foreach (var songId in songIds)
+                {
+                    query = "INSERT INTO play_queue(p_id, s_id) VALUES (@p_id, @songId)";
+                    using (SQLiteCommand command = new SQLiteCommand(query, _connection, transaction))
+                    {
+                        command.Parameters.AddWithValue("@p_id", p_id);
+                        command.Parameters.AddWithValue("@songId", songId);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                transaction.Commit();
+            }
             _connection.Close();
             return p_id;
         }
@@ -241,8 +245,23 @@ public sealed class Database : IDatabase
         }
     }
 
-    public void DeletePlaylist(int playlistId)
+    public void DeletePlaylist(string name)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _connection.Open();
+            string query = "DELETE FROM playlists WHERE name = (@name)";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.Parameters.AddWithValue("@name", name);
+                command.ExecuteNonQuery();
+            }
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }

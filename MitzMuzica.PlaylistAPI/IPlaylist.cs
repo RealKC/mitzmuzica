@@ -4,5 +4,6 @@ public interface IPlaylist
 {
     public string PlaylistName { get; }
 
-    public void CreatePlaylist(int[] songIds);
+    public void CreatePlaylist(List<int> songIds);
+    public void DeletePlaylist();
 }
