@@ -15,9 +15,14 @@ public class Playlist : IPlaylist
         db.CreateDatabase();
     }
 
-    public void CreatePlaylist(List<int> songIds)
+    public void AddSongs(List<int> songIds)
     {
-        int p_id = db.InsertNewPlaylist(PlaylistName, songIds);
+        db.InsertNewPlaylist(PlaylistName, songIds);
+    }
+    
+    public List<int> GetSongs()
+    {
+        return db.GetPlaylist(PlaylistName);
     }
     
     public void DeletePlaylist()

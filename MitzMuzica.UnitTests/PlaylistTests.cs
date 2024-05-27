@@ -7,11 +7,11 @@ public class PlaylistTests
     [Test]
     public void Test1CreatePlaylist()
     {
-        IPlaylist playlist = new Playlist("bobi11");
+        IPlaylist playlist = new Playlist("bobi12");
         List<int> songlist = new List<int>();
         songlist.Add(3);
-        songlist.Add(1);
-        playlist.CreatePlaylist(songlist);
+        songlist.Add(4);
+        playlist.AddSongs(songlist);
     }
     
     [Test]
@@ -27,7 +27,7 @@ public class PlaylistTests
         IPlaylist playlist = new Playlist("bobi12");
         List<int> songlist = new List<int>();
         songlist.Add(3);
-        playlist.CreatePlaylist(songlist);
+        playlist.AddSongs(songlist);
         playlist.DeletePlaylist();
     }
     

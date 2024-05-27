@@ -15,20 +15,25 @@ public class DatabaseTests
     [Test]
     public void Test2GetSongPath()
     {
-        int songId = 1;
+        int songId = 3;
+        string songTitle = "Pacod2";
         string path;
 
         path = db.GetSongPath(songId);
         
-        Assert.IsTrue(songId == 1 
-                      && path == "225200", 
+        Assert.IsTrue(path == "2252002", 
                       $"Valorile gasite sunt: ID: {songId}, Path: {path}");
+        
+        path = db.GetSongPath(songTitle);
+        
+        Assert.IsTrue(path == "2252002", 
+            $"Valorile gasite sunt: ID: {songId}, Path: {path}");
     }
     
     [Test]
     public void Test1InsertNewSong()
     {
-        string title = "Pacod2", path = "2252002";
+        string title = "Pacod", path = "225200";
 
         db.InsertNewSong(title, path);
     }
@@ -39,15 +44,24 @@ public class DatabaseTests
         int s_id = db.GetSongID("Pacod");
 
         db.DeleteSong(s_id);
+        
+        db.InsertNewSong("Pacod", "path");
+        
+        db.DeleteSong("Pacod");
     }
     
     [Test]
     public void Test4GetPlaylist()
     {
-        int p_id = 1;
+        int p_id = 7;
 
         List<int> temp =  db.GetPlaylist(p_id);
         string results = string.Join(", ", temp);
-        Assert.IsTrue("1, 2" == results, $"Elementele gasite: {results}");
+        
+        Assert.IsTrue("3, 4" == results, $"Elementele gasite: {results}");
+        
+        temp =  db.GetPlaylist("bobi12");
+        results = string.Join(", ", temp);
+        Assert.IsTrue("3, 4" == results, $"Elementele gasite: {results}");
     }
 }
