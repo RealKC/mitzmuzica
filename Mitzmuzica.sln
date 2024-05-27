@@ -7,6 +7,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MitzMuzica", "MitzMuzica\Mi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MitzMuzica.Desktop", "MitzMuzica.Desktop\MitzMuzica.Desktop.csproj", "{57BBBAE6-8BC9-4322-99C5-685E2B2DD1EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.PluginAPI", "MitzMuzica.PluginAPI\MitzMuzica.PluginAPI.csproj", "{A1466A82-6C86-488F-914A-8BACBF67A099}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.PluginLoader", "MitzMuzica.PluginLoader\MitzMuzica.PluginLoader.csproj", "{A2C38CF8-ECB2-43B5-BDF7-99F5D763F3AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.TestPlugin", "MitzMuzica.TestPlugin\MitzMuzica.TestPlugin.csproj", "{CEDA196E-21B9-40E2-A3D0-0DC53BADADA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.PluginLoaderTest", "MitzMuzica.PluginLoaderTest\MitzMuzica.PluginLoaderTest.csproj", "{72851279-BFA9-42BB-9362-8AFD0C65E607}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.DatabaseAPI", "MitzMuzica.DatabaseAPI\MitzMuzica.DatabaseAPI.csproj", "{5C2411A5-6FBB-4BBB-879E-D9E2C8A0ADD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.PlaylistAPI", "MitzMuzica.PlaylistAPI\MitzMuzica.PlaylistAPI.csproj", "{E9C97519-B356-4EEA-B5AC-7A549B36249B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.UnitTests", "MitzMuzica.UnitTests\MitzMuzica.UnitTests.csproj", "{59B164F6-9571-4889-A54E-44A0A445461C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +35,34 @@ Global
 		{57BBBAE6-8BC9-4322-99C5-685E2B2DD1EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57BBBAE6-8BC9-4322-99C5-685E2B2DD1EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57BBBAE6-8BC9-4322-99C5-685E2B2DD1EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1466A82-6C86-488F-914A-8BACBF67A099}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1466A82-6C86-488F-914A-8BACBF67A099}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1466A82-6C86-488F-914A-8BACBF67A099}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1466A82-6C86-488F-914A-8BACBF67A099}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2C38CF8-ECB2-43B5-BDF7-99F5D763F3AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2C38CF8-ECB2-43B5-BDF7-99F5D763F3AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2C38CF8-ECB2-43B5-BDF7-99F5D763F3AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2C38CF8-ECB2-43B5-BDF7-99F5D763F3AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEDA196E-21B9-40E2-A3D0-0DC53BADADA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEDA196E-21B9-40E2-A3D0-0DC53BADADA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEDA196E-21B9-40E2-A3D0-0DC53BADADA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEDA196E-21B9-40E2-A3D0-0DC53BADADA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72851279-BFA9-42BB-9362-8AFD0C65E607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72851279-BFA9-42BB-9362-8AFD0C65E607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72851279-BFA9-42BB-9362-8AFD0C65E607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72851279-BFA9-42BB-9362-8AFD0C65E607}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C2411A5-6FBB-4BBB-879E-D9E2C8A0ADD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C2411A5-6FBB-4BBB-879E-D9E2C8A0ADD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C2411A5-6FBB-4BBB-879E-D9E2C8A0ADD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C2411A5-6FBB-4BBB-879E-D9E2C8A0ADD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9C97519-B356-4EEA-B5AC-7A549B36249B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9C97519-B356-4EEA-B5AC-7A549B36249B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9C97519-B356-4EEA-B5AC-7A549B36249B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9C97519-B356-4EEA-B5AC-7A549B36249B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59B164F6-9571-4889-A54E-44A0A445461C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59B164F6-9571-4889-A54E-44A0A445461C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59B164F6-9571-4889-A54E-44A0A445461C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59B164F6-9571-4889-A54E-44A0A445461C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
