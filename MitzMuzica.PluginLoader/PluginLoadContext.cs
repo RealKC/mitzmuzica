@@ -1,3 +1,12 @@
+/**************************************************************************
+ *                                                                        *
+ *  Description: Helper class for loading plugins                         *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Mițca Dumitru                                  *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+
 using System.Reflection;
 using System.Runtime.Loader;
 

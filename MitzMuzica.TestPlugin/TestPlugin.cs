@@ -1,4 +1,13 @@
-﻿using MitzMuzica.PluginAPI;
+﻿/**************************************************************************
+ *                                                                        *
+ *  Description: A test plugin that offers no real functionality          *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Mițca Dumitru                                  *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+
+using MitzMuzica.PluginAPI;
 
 namespace MitzMuzica.TestPlugin;
 
