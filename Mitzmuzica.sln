@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.TestPlugin", "Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.PluginLoaderTest", "MitzMuzica.PluginLoaderTest\MitzMuzica.PluginLoaderTest.csproj", "{72851279-BFA9-42BB-9362-8AFD0C65E607}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.AudioPlayerPlugin", "MitzMuzica.AudioPlayerPlugin\MitzMuzica.AudioPlayerPlugin.csproj", "{68F44AD2-5ABF-4CDB-A37E-4FE0C43234B4}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.DatabaseAPI", "MitzMuzica.DatabaseAPI\MitzMuzica.DatabaseAPI.csproj", "{5C2411A5-6FBB-4BBB-879E-D9E2C8A0ADD2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MitzMuzica.PlaylistAPI", "MitzMuzica.PlaylistAPI\MitzMuzica.PlaylistAPI.csproj", "{E9C97519-B356-4EEA-B5AC-7A549B36249B}"
@@ -51,6 +53,10 @@ Global
 		{72851279-BFA9-42BB-9362-8AFD0C65E607}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72851279-BFA9-42BB-9362-8AFD0C65E607}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72851279-BFA9-42BB-9362-8AFD0C65E607}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68F44AD2-5ABF-4CDB-A37E-4FE0C43234B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68F44AD2-5ABF-4CDB-A37E-4FE0C43234B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68F44AD2-5ABF-4CDB-A37E-4FE0C43234B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68F44AD2-5ABF-4CDB-A37E-4FE0C43234B4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5C2411A5-6FBB-4BBB-879E-D9E2C8A0ADD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5C2411A5-6FBB-4BBB-879E-D9E2C8A0ADD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C2411A5-6FBB-4BBB-879E-D9E2C8A0ADD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
