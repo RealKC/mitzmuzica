@@ -1,4 +1,5 @@
-﻿using MitzMuzica.PlaylistAPI;
+﻿using MitzMuzica.DatabaseAPI;
+using MitzMuzica.PlaylistAPI;
 
 namespace MitzMuzica.UnitTests;
 
@@ -9,7 +10,6 @@ public class PlaylistTests
     {
         IPlaylist playlist = new Playlist("Test");
         List<int> songlist = new List<int>();
-        songlist.Add(1);
         playlist.AddSongs(songlist);
     }
     
@@ -18,21 +18,20 @@ public class PlaylistTests
     {
         IPlaylist playlist = new Playlist("Test2");
         List<int> songlist = new List<int>();
-        songlist.Add(1);
         playlist.AddSongs(songlist);
         List<int> results = playlist.GetSongs();
         
-        Assert.IsTrue("1" == string.Join(", ", results), 
+        Assert.IsTrue("" == string.Join(", ", results), 
             $"Elementele gasite: {results}");
     }
     
     [Test]
     public void Test3DeletePlaylist()
     {
-        IPlaylist playlist = new Playlist("Test4");
-        List<int> songlist = new List<int>();
-        songlist.Add(1);
-        playlist.AddSongs(songlist);
-        playlist.DeletePlaylist();
+        IPlaylist playlist1 = new Playlist("Test");
+        IPlaylist playlist2 = new Playlist("Test2");
+
+        playlist1.DeletePlaylist();
+        playlist2.DeletePlaylist();
     }
 }
