@@ -23,20 +23,16 @@
         <Label DockPanel.Dock="Bottom" Content="{Binding NowPlaying}"></Label>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label x:Name="TimePlayed">0:00</Label>
-            <Slider Width="400" Minimum="0" Maximum="100" x:Name="ProgressSlider" PointerReleased="ProgressChanged"></Slider>
+            <Slider Width="400" Minimum="0" Maximum="100" x:Name="ProgressSlider" ValueChanged="ProgressChanged"></Slider>
             <Label x:Name="SongLength">3:00</Label>
         </StackPanel>
         
         
         <!-- Media Control Buttons --> 
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button><avalonia:MaterialIcon Kind="SkipPrevious"/></Button>
-       
             <Button Click="TogglePlayState">
                 <avalonia:MaterialIcon Kind="{Binding Converter={StaticResource PlayPauseConverter}, Path=IsPlaying}"/>
             </Button>
- 
-            <Button><avalonia:MaterialIcon Kind="SkipNext"/></Button>
         </StackPanel>
       
         <!-- Playlists Section -->

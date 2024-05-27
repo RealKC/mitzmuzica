@@ -140,7 +140,7 @@ public partial class MainView : UserControl
         }
     }
 
-    private void ProgressChanged(object? sender, PointerReleasedEventArgs pointerReleasedEventArgs)
+    private void ProgressChanged(object? sender, RangeBaseValueChangedEventArgs rangeBaseValueChangedEventArgs)
     {
         if (DataContext is MainViewModel viewModel)
         {
@@ -148,7 +148,7 @@ public partial class MainView : UserControl
             string seconds = y % 60 < 10 ? "0" + y % 60 : (y % 60).ToString();
             TimePlayed.Content = y / 60 + ":" + seconds;
             
-            viewModel.PlayingFile?.SeekTo((long)ProgressSlider.Value);
+            //viewModel.PlayingFile?.SeekTo((long)ProgressSlider.Value);
         }
     }
 }
