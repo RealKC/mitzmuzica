@@ -7,6 +7,7 @@
  *                                                                        *
  **************************************************************************/
 
+using System.Data;
 using System.Data.SQLite;
 using MitzMuzica.PluginAPI;
 
@@ -57,12 +58,17 @@ public sealed class Database : IDatabase
             {
                 command.ExecuteNonQuery();
             }
-
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
+        }
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
         }
     }
 
@@ -74,22 +80,10 @@ public sealed class Database : IDatabase
     public int InsertNewSong(string title, string path)
     {
         int songId;
-        bool isOpen = true;
         try
         {
-            while (isOpen)
-            {
-                try
-                {
-                    _connection.Open();
-                    isOpen = false;
-                }
-                catch (SQLiteException e)
-                {
-                    Thread.Sleep(100);
-                }
-            }
-
+            _connection.Open();
+            
             string query = "INSERT INTO songs(title, path) VALUES (@title, @path) RETURNING s_id";
 
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
@@ -99,7 +93,6 @@ public sealed class Database : IDatabase
                 songId = Convert.ToInt32(command.ExecuteScalar());
             }
 
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
@@ -110,6 +103,13 @@ public sealed class Database : IDatabase
             else
             {
                 throw new Exception(ex.Message);
+            }
+        }    
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
             }
         }
 
@@ -135,13 +135,21 @@ public sealed class Database : IDatabase
                     }
                 }
             }
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
         }
-
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
+        }
+        if (path == "")
+            throw new Exception("Provided identifier does not exist!");
+        
         return path;
     }
     
@@ -164,13 +172,22 @@ public sealed class Database : IDatabase
                     }
                 }
             }
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
         }
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
+        }
 
+        if (path == "")
+            throw new Exception("Provided title does not exist!");
+        
         return path;
     }
     
@@ -193,13 +210,21 @@ public sealed class Database : IDatabase
                     }
                 }
             }
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
         }
-
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
+        }
+        if (songId == 0)
+            throw new Exception("Provided title does not exist!");
+        
         return songId;
     }
     
@@ -222,18 +247,27 @@ public sealed class Database : IDatabase
                     }
                 }
             }
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
         }
-
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
+        }
+        if (songTitle == "")
+            throw new Exception("Provided identifier does not exist!");
+        
         return songTitle;
     }
 
     public void DeleteSong(int songId)
     {
+        int affectedRows = 0;
         try
         {
             _connection.Open();
@@ -242,17 +276,27 @@ public sealed class Database : IDatabase
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
                 command.Parameters.AddWithValue("@s_id", songId);
-                command.ExecuteNonQuery();
+                affectedRows = command.ExecuteNonQuery();
             }
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
+        }        
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
         }
+        
+        if (affectedRows == 0)
+            throw new Exception("Provided identifier does not exist!");
     }
     public void DeleteSong(string title)
     {
+        int affectedRows = 0;
         try
         {
             _connection.Open();
@@ -262,12 +306,21 @@ public sealed class Database : IDatabase
                 command.Parameters.AddWithValue("@title", title);
                 command.ExecuteNonQuery();
             }
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
         }
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
+        }
+        
+        if (affectedRows == 0)
+            throw new Exception("Provided title does not exist!");
     }
     public List<int> GetPlaylist(int playlistId)
     {
@@ -288,13 +341,22 @@ public sealed class Database : IDatabase
                     }
                 }
             }
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
         }
-    
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
+        }
+
+        if (results.Count == 0)
+            throw new Exception("Provided identifier does not exist!");
+        
         return results;
     }
     
@@ -318,11 +380,17 @@ public sealed class Database : IDatabase
                     }
                 }
             }
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
+        }        
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
         }
     
         results = GetPlaylist(playlistId);
@@ -332,6 +400,11 @@ public sealed class Database : IDatabase
 
     public int InsertNewPlaylist(string name, List<int> songIds)
     {
+        if (songIds.Count == 0)
+        {
+            throw new Exception("A Playlist should have at least 1 song!");
+        }
+
         try
         {
             int playlistId = 0;
@@ -359,7 +432,6 @@ public sealed class Database : IDatabase
                 }
                 transaction.Commit();
             }
-            _connection.Close();
             return playlistId;
         }
         catch (SQLiteException ex)
@@ -373,10 +445,18 @@ public sealed class Database : IDatabase
                 throw new Exception(ex.Message);
             }
         }
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
+        }
     }
 
     public void DeletePlaylist(string name)
     {
+        int affectedRows = 0;
         try
         {
             _connection.Open();
@@ -385,13 +465,21 @@ public sealed class Database : IDatabase
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
                 command.Parameters.AddWithValue("@name", name);
-                command.ExecuteNonQuery();
+                affectedRows = command.ExecuteNonQuery();
             }
-            _connection.Close();
         }
         catch (SQLiteException ex)
         {
             throw new Exception(ex.Message);
         }
+        finally
+        {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
+        }
+        if (affectedRows == 0)
+            throw new Exception("Provided title does not exist!");
     }
 }

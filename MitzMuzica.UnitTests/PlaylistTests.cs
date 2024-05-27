@@ -26,17 +26,37 @@ public class PlaylistTests
         db.CreateDatabase(testDatabasePath);
     }
     
+    [TearDown]
+    public void TearDown()
+    {
+        if (File.Exists(testDatabasePath))
+        {
+            File.Delete(testDatabasePath);
+        }
+    }
 
     [Test]
     public void Test1CreatePlaylist()
     {
+        db.InsertNewSong("test", "path");
         IPlaylist playlist = new Playlist("Test", db);
         List<int> songlist = new List<int>();
+        songlist.Add(db.GetSongId("test"));
         playlist.AddSongs(songlist);
     }
     
     [Test]
-    public void Test2CreatePlaylistWithSqlInjection()
+    public void Test1CreatePlaylistNotEnoughSongs()
+    {
+        IPlaylist playlist = new Playlist("Test", db);
+        List<int> songlist = new List<int>();
+        var ex = Assert.Catch<Exception>(() => playlist.AddSongs(songlist));
+        
+        Assert.That(ex, Is.TypeOf<Exception>());
+    }
+    
+    [Test]
+    public void Test1CreatePlaylistWithSqlInjection()
     {
         db.InsertNewSong("test", "path");
         IPlaylist playlist = new Playlist("Delete from songs;", db);
@@ -48,7 +68,7 @@ public class PlaylistTests
     }
     
     [Test]
-    public void Test3CreatePlaylistWithInexistentSongs()
+    public void Test1CreatePlaylistWithInexistentSongs()
     {
         IPlaylist playlist = new Playlist("Test2", db);
         List<int> songlist = new List<int> { -1 };
@@ -59,15 +79,16 @@ public class PlaylistTests
     }
     
     [Test]
-    public void Test4GetSonglist()
+    public void Test2GetSonglist()
     {
-        db.InsertNewSong("test22", "path");
+        db.InsertNewSong("test22", "path2");
         
         IPlaylist playlist = new Playlist("Test4", db);
         List<int> songlist = new List<int>();
         
         songlist.Add(db.GetSongId("test22"));
         playlist.AddSongs(songlist);
+        
         List<int> results = playlist.GetSongs();
         
         Assert.IsNotEmpty(results, 
@@ -75,14 +96,32 @@ public class PlaylistTests
     }
     
     [Test]
-    public void Test5DeletePlaylist()
+    public void Test2GetSonglistInvalidTitle()
     {
-        IPlaylist playlist1 = new Playlist("Test", db);
-        playlist1.DeletePlaylist();
+        IPlaylist playlist = new Playlist("Test42", db);
+        var ex = Assert.Catch<Exception>(() => playlist.GetSongs());
         
-        IPlaylist playlist2 = new Playlist("Test2", db);
-        playlist2.DeletePlaylist();
+        Assert.That(ex, Is.TypeOf<Exception>());
     }
     
+    [Test]
+    public void Test3DeletePlaylist()
+    {
+        db.InsertNewSong("test", "path");
+        IPlaylist playlist1 = new Playlist("Test", db);
+        List<int> songlist = new List<int> { 1 };
+        
+        playlist1.AddSongs(songlist);
+        
+        playlist1.DeletePlaylist();
+    }
     
+    [Test]
+    public void Test3DeleteInexistentPlaylist()
+    {
+        IPlaylist playlist = new Playlist("Test3", db);
+        var ex = Assert.Catch<Exception>(() => playlist.DeletePlaylist());
+        
+        Assert.That(ex, Is.TypeOf<Exception>());
+    }
 }
