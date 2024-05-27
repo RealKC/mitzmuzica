@@ -19,7 +19,7 @@ namespace MitzMuzica.Views;
 public partial class HelpWindow : Window
 {
     private int _pageNumber = 0;
-    private readonly int _pageCount = 2;
+    private readonly int _pageCount = 3;
     private readonly PDFRenderer _pdfRenderer;
     private readonly MemoryStream _pdfContent = new ();
     
