@@ -9,7 +9,7 @@ public class AudioPlayerPlugin : IAudioFile
     private string _title;
     private string _author;
     private long _length;
-    //Singleton media player
+    //Instance media player
     private MediaPlayerSingleton _mediaPlayer;
     private Media _media;
     public string Title { get { return _title; } }
@@ -18,7 +18,6 @@ public class AudioPlayerPlugin : IAudioFile
 
     public AudioPlayerPlugin(string path, string title, string author, long length)
     {
-        //Initializeaza libraria LibVLC
         Core.Initialize();
         
         _path = path;
@@ -45,8 +44,10 @@ public class AudioPlayerPlugin : IAudioFile
         _mediaPlayer._player.Stop();
     }
 
+    //s - milliseconds
     public void SeekTo(long s)
     {
-        //_mediaPlayer.SeekTo(System.TimeSpan(s));
+        //sets the time of the currently playing track to s milliseconds
+        _mediaPlayer._player.Time = s;
     }
 }
