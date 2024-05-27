@@ -42,5 +42,6 @@
   <ItemGroup>
     <ProjectReference Include="..\MitzMuzica.DatabaseAPI\MitzMuzica.DatabaseAPI.csproj" />
     <ProjectReference Include="..\MitzMuzica.PlaylistAPI\MitzMuzica.PlaylistAPI.csproj" />
+    <ProjectReference Include="..\MitzMuzica.PluginLoader\MitzMuzica.PluginLoader.csproj" />
   </ItemGroup>
 </Project>

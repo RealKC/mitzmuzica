@@ -9,60 +9,47 @@ using Avalonia.Data.Converters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Material.Icons;
 using MitzMuzica.DatabaseAPI;
-
+using MitzMuzica.PluginAPI;
+using MitzMuzica.PluginLoader;
 namespace MitzMuzica.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
     public string Greeting => "Welcome to Avalonia!";
     private Playlist _selectedPlaylist;
-    
+    private string _nowPlaying= "Now playing: nothing";
+    private PluginLoader.PluginLoader _pluginLoader = new PluginLoader.PluginLoader(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/plugins");
+    public string NowPlaying
+    {
+        get => _nowPlaying;
+        set => _nowPlaying = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
     public MainViewModel()
     {
-        Playlists = new ObservableCollection<Playlist>(PlaylistsTest);
+        
         _db.CreateDatabase(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/testDB.db");
         List<string> playlists = _db.GetPlaylistNames();
         foreach (var playlist in playlists)
         {
             List<Song> songs = [];
-            List<int> songIDs = [];
-            songIDs = _db.GetPlaylist(playlist);
+            List<int> songIDs = _db.GetPlaylist(playlist);
+           
             foreach (var songID in songIDs)
             {
-                // songs.Add(new Song(_db.GetSongName(songID), _db.GetSongPath(songID)));
+                 songs.Add(new Song(_db.GetSongTitle(songID), _db.GetSongPath(songID)));
             }
-            PlaylistsTest.Add(new Playlist(playlist, songs));
-            
+            _playlistsTest.Add(new Playlist(playlist, songs));
         }
+        Playlists = new ObservableCollection<Playlist>(_playlistsTest);
+        _pluginLoader.LoadPlugins();
+        List<IAudioPlugin> test = _pluginLoader.AudioPlugins;
+        
+        Console.WriteLine(test);
     }
 
-    private Database _db = new Database();
-    public List<Playlist> PlaylistsTest = new List<Playlist>
-    {
-        new Playlist("Manele", new List<Song>
-        {
-            new Song("Eee Aaa", "Tzanca"),
-            new Song("Nu imi plac politisti", "Salam"),
-            // Add more songs here...
-            new Song("Song Title 1", "Artist 1"),
-            new Song("Song Title 2", "Artist 2"),
-            new Song("Song Title 3", "Artist 3"),
-        }),
-        new Playlist("Pop", new List<Song>
-        {
-            // Add songs here...
-            new Song("Pop Song Title 1", "Pop Artist 1"),
-            new Song("Pop Song Title 2", "Pop Artist 2"),
-            new Song("Pop Song Title 3", "Pop Artist 3"),
-        }),
-        new Playlist("Rock", new List<Song>
-        {
-            // Add songs here...
-            new Song("Rock Song Title 1", "Rock Artist 1"),
-            new Song("Rock Song Title 2", "Rock Artist 2"),
-            new Song("Rock Song Title 3", "Rock Artist 3"),
-        }),
-    };
+    private readonly Database _db = new Database();
+    private readonly List<Playlist> _playlistsTest = [];
 
     public class Song(string title, string path) //TODO replace this with AudioFile class
     {
