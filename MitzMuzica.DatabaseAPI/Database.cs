@@ -267,6 +267,7 @@ public sealed class Database : IDatabase
 
     public void DeleteSong(int songId)
     {
+        int affectedRows = 0;
         try
         {
             _connection.Open();
@@ -275,7 +276,7 @@ public sealed class Database : IDatabase
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
                 command.Parameters.AddWithValue("@s_id", songId);
-                command.ExecuteNonQuery();
+                affectedRows = command.ExecuteNonQuery();
             }
         }
         catch (SQLiteException ex)
@@ -289,9 +290,13 @@ public sealed class Database : IDatabase
                 _connection.Close();
             }
         }
+        
+        if (affectedRows == 0)
+            throw new Exception("Provided identifier does not exist!");
     }
     public void DeleteSong(string title)
     {
+        int affectedRows = 0;
         try
         {
             _connection.Open();
@@ -313,6 +318,9 @@ public sealed class Database : IDatabase
                 _connection.Close();
             }
         }
+        
+        if (affectedRows == 0)
+            throw new Exception("Provided title does not exist!");
     }
     public List<int> GetPlaylist(int playlistId)
     {
@@ -345,6 +353,10 @@ public sealed class Database : IDatabase
                 _connection.Close();
             }
         }
+
+        if (results.Count == 0)
+            throw new Exception("Provided identifier does not exist!");
+        
         return results;
     }
     
@@ -388,6 +400,11 @@ public sealed class Database : IDatabase
 
     public int InsertNewPlaylist(string name, List<int> songIds)
     {
+        if (songIds.Count == 0)
+        {
+            throw new Exception("A Playlist should have at least 1 song!");
+        }
+
         try
         {
             int playlistId = 0;
@@ -439,6 +456,7 @@ public sealed class Database : IDatabase
 
     public void DeletePlaylist(string name)
     {
+        int affectedRows = 0;
         try
         {
             _connection.Open();
@@ -447,7 +465,7 @@ public sealed class Database : IDatabase
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
                 command.Parameters.AddWithValue("@name", name);
-                command.ExecuteNonQuery();
+                affectedRows = command.ExecuteNonQuery();
             }
         }
         catch (SQLiteException ex)
@@ -461,5 +479,7 @@ public sealed class Database : IDatabase
                 _connection.Close();
             }
         }
+        if (affectedRows == 0)
+            throw new Exception("Provided title does not exist!");
     }
 }

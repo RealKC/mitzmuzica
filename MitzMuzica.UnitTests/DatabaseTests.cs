@@ -88,11 +88,16 @@ public class DatabaseTests
     [Test]
     public void Test4DeleteSong()
     {
-        
         int songId = db.InsertNewSong("Test2", "225201");
         
         db.DeleteSong(songId);
+    }
+    
+    [Test]
+    public void Test4DeleteInexistentSong()
+    {
+        var ex = Assert.Catch<Exception>(() => db.DeleteSong("Test23"));
         
-        db.DeleteSong("Test");
+        Assert.That(ex, Is.TypeOf<Exception>());
     }
 }
