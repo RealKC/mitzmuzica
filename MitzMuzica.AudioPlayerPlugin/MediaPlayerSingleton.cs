@@ -1,11 +1,20 @@
+/**************************************************************************
+ *                                                                        *
+ *  Description: Initializes the vlc library and the media player         *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Panciuc Ilie Cosmin                            *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+
 using LibVLCSharp.Shared;
 namespace MitzMuzica.AudioPlayerPlugin;
 
 public class MediaPlayerSingleton
 {
     private static MediaPlayerSingleton _instance;
-    public MediaPlayer _player;
-    public LibVLC _libVLC;
+    public MediaPlayer Player;
+    public LibVLC LibVLC;
 
     /// <summary>
     /// Constructor of the MediaPlayerSingleton class, initializes the libVLC library and the media player
@@ -13,8 +22,8 @@ public class MediaPlayerSingleton
     private MediaPlayerSingleton()
     {
         //Initialize libvlc library and media player
-        _libVLC = new LibVLC();
-        _player = new MediaPlayer(_libVLC);
+        LibVLC = new LibVLC();
+        Player = new MediaPlayer(LibVLC);
     }
     
     /// <summary>

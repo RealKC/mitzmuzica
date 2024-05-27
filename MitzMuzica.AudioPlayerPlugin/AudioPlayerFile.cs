@@ -1,4 +1,13 @@
-﻿using LibVLCSharp.Shared;
+﻿/**************************************************************************
+ *                                                                        *
+ *  Description: Library that takes care of the play of media             *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Panciuc Ilie Cosmin                            *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+
+using LibVLCSharp.Shared;
 using MitzMuzica.PluginAPI;
 namespace MitzMuzica.AudioPlayerPlugin;
 
@@ -9,18 +18,25 @@ public class AudioPlayerFile : IAudioFile
     private string _title;
     private string _author;
     private long _length;
+    
+    /// <summary>
+    /// _currentTime in seconds
+    /// </summary>
     private long _currentTime = 0;
     
     private MediaPlayerSingleton _mediaPlayer;
     private Media _media;
+    
     /// <summary>
     /// Returns the title of the file if it exists otherwise return "unknown"
     /// </summary>
     public string Title { get { return _title; } }
+    
     /// <summary>
     /// Returns the author of the file if it exists otherwise return "unknown"
     /// </summary>
     public string Author { get { return _author; } }
+    
     /// <summary>
     /// Returns the length of the file returns -1 if the length cant be determined from metadata
     /// </summary>
@@ -38,7 +54,7 @@ public class AudioPlayerFile : IAudioFile
         _path = path;
         
         _mediaPlayer = MediaPlayerSingleton.Instance();
-        _media = new Media(_mediaPlayer._libVLC, _path);
+        _media = new Media(_mediaPlayer.LibVLC, _path);
         
         _media.Parse().Wait();
         
@@ -58,7 +74,7 @@ public class AudioPlayerFile : IAudioFile
         //start a thread playing the song
         Task.Run(() =>
         {
-            _mediaPlayer._player.Play(_media);
+            _mediaPlayer.Player.Play(_media);
             //set the player time to _currentTime
             SeekTo(_currentTime);
         });
@@ -70,23 +86,26 @@ public class AudioPlayerFile : IAudioFile
     public void Stop()
     {
         //save the time at witch the media is paused
-        _currentTime =  _mediaPlayer._player.Time;
+        _currentTime =  _mediaPlayer.Player.Time / 1000;
         //pause media player
-        _mediaPlayer._player.Pause();
+        _mediaPlayer.Player.Pause();
 
     }
     
     /// <summary>
     /// Sets the time of the currently playing media to s
     /// </summary>
-    /// <param name="s">Timestamp in milliseconds</param>
+    /// <param name="s">Timestamp in seconds</param>
     public void SeekTo(long s)
     {
- 
-        //sets the time of the currently playing track to s milliseconds
+        
+        //Check if the number of seconds is valid
         if (s >= 0)
-        {
-            _mediaPlayer._player.Time = s;
+        {   
+            //calculate number of milliseconds
+            long m = s * 1000;
+            //sets the time of the currently playing track to m milliseconds
+            _mediaPlayer.Player.Time = m;
         }
     }
 }
