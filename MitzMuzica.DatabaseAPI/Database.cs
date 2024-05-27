@@ -63,20 +63,20 @@ public sealed class Database : IDatabase
         _connection ??= new SQLiteConnection($"Data Source={path};foreign keys=true");
     }
 
-    public void InsertNewSong(string title, string path)
+    public int InsertNewSong(string title, string path)
     {
-        // TO DO: Add return id on inserting
+        int songId;
         try
         {
             _connection.Open();
             
-            string query = "INSERT INTO songs(title, path) VALUES (@title, @path)";
+            string query = "INSERT INTO songs(title, path) VALUES (@title, @path) RETURNING s_id";
 
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
                 command.Parameters.AddWithValue("@title", title);
                 command.Parameters.AddWithValue("@path", path);
-                command.ExecuteNonQuery();
+                songId = Convert.ToInt32(command.ExecuteScalar());
             }
 
             _connection.Close();
@@ -92,9 +92,11 @@ public sealed class Database : IDatabase
                 throw new Exception(ex.Message);
             }
         }
+
+        return songId;
     }
     
-    public string GetSongPath(int s_id)
+    public string GetSongPath(int songId)
     {
         string path = "";
         try
@@ -104,7 +106,7 @@ public sealed class Database : IDatabase
 
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
-                command.Parameters.AddWithValue("@s_id", s_id);
+                command.Parameters.AddWithValue("@s_id", songId);
                 using (SQLiteDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -126,37 +128,6 @@ public sealed class Database : IDatabase
     public string GetSongPath(string title)
     {
         string path = "";
-        int s_id = 0;
-        try
-        {
-            _connection.Open();
-            string query = "SELECT s_id FROM songs WHERE title = @title";
-
-            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
-            {
-                command.Parameters.AddWithValue("@title", title);
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        s_id = reader.GetInt32(reader.GetOrdinal("s_id"));
-                    }
-                }
-            }
-            _connection.Close();
-        }
-        catch (SQLiteException ex)
-        {
-            throw new Exception(ex.Message);
-        }
-
-        path = GetSongPath(s_id);
-        return path;
-    }
-    
-    public int GetSongID(string title)
-    {
-        int s_id = 0;
         try
         {
             _connection.Open();
@@ -169,7 +140,7 @@ public sealed class Database : IDatabase
                 {
                     while (reader.Read())
                     {
-                        s_id = reader.GetInt32(reader.GetOrdinal("s_id"));
+                        path = reader.GetString(reader.GetOrdinal("path"));
                     }
                 }
             }
@@ -180,10 +151,39 @@ public sealed class Database : IDatabase
             throw new Exception(ex.Message);
         }
 
-        return s_id;
+        return path;
+    }
+    
+    public int GetSongID(string title)
+    {
+        int songId = 0;
+        try
+        {
+            _connection.Open();
+            string query = "SELECT * FROM songs WHERE title = @title";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.Parameters.AddWithValue("@title", title);
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        songId = reader.GetInt32(reader.GetOrdinal("s_id"));
+                    }
+                }
+            }
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+        return songId;
     }
 
-    public void DeleteSong(int s_id)
+    public void DeleteSong(int songId)
     {
         try
         {
@@ -192,7 +192,7 @@ public sealed class Database : IDatabase
 
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
-                command.Parameters.AddWithValue("@s_id", s_id);
+                command.Parameters.AddWithValue("@s_id", songId);
                 command.ExecuteNonQuery();
             }
             _connection.Close();
@@ -220,7 +220,7 @@ public sealed class Database : IDatabase
             throw new Exception(ex.Message);
         }
     }
-    public List<int> GetPlaylist(int p_id)
+    public List<int> GetPlaylist(int playlistId)
     {
         List<int> results = new List<int>();
         try
@@ -230,7 +230,7 @@ public sealed class Database : IDatabase
     
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
             {
-                command.Parameters.AddWithValue("@p_id", p_id);
+                command.Parameters.AddWithValue("@p_id", playlistId);
                 using (SQLiteDataReader reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -252,7 +252,7 @@ public sealed class Database : IDatabase
     public List<int> GetPlaylist(string name)
     {
         List<int> results = new List<int>();
-        int p_id = 0;
+        int playlistId = 0;
         try
         {
             _connection.Open();
@@ -265,7 +265,7 @@ public sealed class Database : IDatabase
                 {
                     while (reader.Read())
                     {
-                        p_id = reader.GetInt32(reader.GetOrdinal("p_id"));
+                        playlistId = reader.GetInt32(reader.GetOrdinal("p_id"));
                     }
                 }
             }
@@ -276,7 +276,7 @@ public sealed class Database : IDatabase
             throw new Exception(ex.Message);
         }
     
-        results = GetPlaylist(p_id);
+        results = GetPlaylist(playlistId);
 
         return results;
     }
@@ -285,7 +285,7 @@ public sealed class Database : IDatabase
     {
         try
         {
-            int p_id = 0;
+            int playlistId = 0;
             _connection.Open();
             using (SQLiteTransaction transaction = _connection.BeginTransaction())
             {
@@ -294,7 +294,7 @@ public sealed class Database : IDatabase
                 using (SQLiteCommand command = new SQLiteCommand(query, _connection, transaction))
                 {
                     command.Parameters.AddWithValue("@name", name);
-                    p_id = Convert.ToInt32(command.ExecuteScalar());
+                    playlistId = Convert.ToInt32(command.ExecuteScalar());
                 }
             
                 foreach (var songId in songIds)
@@ -302,7 +302,7 @@ public sealed class Database : IDatabase
                     query = "INSERT INTO play_queue(p_id, s_id) VALUES (@p_id, @songId)";
                     using (SQLiteCommand command = new SQLiteCommand(query, _connection, transaction))
                     {
-                        command.Parameters.AddWithValue("@p_id", p_id);
+                        command.Parameters.AddWithValue("@p_id", playlistId);
                         command.Parameters.AddWithValue("@songId", songId);
 
                         command.ExecuteNonQuery();
@@ -311,7 +311,7 @@ public sealed class Database : IDatabase
                 transaction.Commit();
             }
             _connection.Close();
-            return p_id;
+            return playlistId;
         }
         catch (SQLiteException ex)
         {

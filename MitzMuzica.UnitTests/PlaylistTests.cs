@@ -7,7 +7,7 @@ public class PlaylistTests
     [Test]
     public void Test1CreatePlaylist()
     {
-        IPlaylist playlist = new Playlist("bobi12");
+        IPlaylist playlist = new Playlist("bobi");
         List<int> songlist = new List<int>();
         songlist.Add(3);
         songlist.Add(4);
@@ -15,16 +15,26 @@ public class PlaylistTests
     }
     
     [Test]
-    public void Test2DeletePlaylist()
+    public void Test2GetSonglist()
     {
-        IPlaylist playlist = new Playlist("bobi10");
+        IPlaylist playlist = new Playlist("bobi2");
+        List<int> songlist = new List<int>();
+        songlist.Add(3);
+        songlist.Add(4);
+        playlist.AddSongs(songlist);
+    }
+    
+    [Test]
+    public void Test3DeletePlaylist()
+    {
+        IPlaylist playlist = new Playlist("bobi3");
         playlist.DeletePlaylist();
     }
     
     [Test]
-    public void Test3CascadeDeleteInQueue()
+    public void Test4CascadeDeleteInQueue()
     {
-        IPlaylist playlist = new Playlist("bobi12");
+        IPlaylist playlist = new Playlist("bobi4");
         List<int> songlist = new List<int>();
         songlist.Add(3);
         playlist.AddSongs(songlist);
