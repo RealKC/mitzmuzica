@@ -5,20 +5,24 @@ namespace MitzMuzica.DatabaseAPI;
 
 public interface IDatabase
 {
+    /// <summary>
+    ///  The connexion to the database
+    /// </summary>
     private static SQLiteConnection? _connection = null;
     /// <summary>
-    /// Creates the database if it doesn't exist already, does nothing otherwise
+    /// Creates the database if it doesn't exist already
+    /// and establishes a connection to it, only establishes a connection otherwise.
     /// </summary>
     public void CreateDatabase();
     /// <summary>
-    /// Establishes a connection to the database
+    /// Establishes a connection to the database.
     /// </summary>
     /// <param name="path"></param>
     public void EstablishConnection(string path) { }
     
     /// <summary>
     /// Inserts a new song in the database and returns a songId,
-    /// duplicate or null title/path will throw an sql exception
+    /// duplicate or null title/path will throw an sql exception.
     /// </summary>
     /// <param name="title"></param>
     /// <param name="path"></param>
