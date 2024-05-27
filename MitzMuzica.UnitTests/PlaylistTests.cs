@@ -19,11 +19,11 @@ public class PlaylistTests
     private string testDatabasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
                                       + "/testDB.db";
 
-    private IDatabase db = new Database();
+    private IDatabase _db = new Database();
     [SetUp]
     public void Setup()
     {
-        db.CreateDatabase(testDatabasePath);
+        _db.CreateDatabase(testDatabasePath);
     }
     
     [TearDown]
@@ -38,17 +38,17 @@ public class PlaylistTests
     [Test]
     public void Test1CreatePlaylist()
     {
-        db.InsertNewSong("test", "path");
-        IPlaylist playlist = new Playlist("Test", db);
+        _db.InsertNewSong("test", "path");
+        IPlaylist playlist = new Playlist("Test", _db);
         List<int> songlist = new List<int>();
-        songlist.Add(db.GetSongId("test"));
+        songlist.Add(_db.GetSongId("test"));
         playlist.AddSongs(songlist);
     }
     
     [Test]
     public void Test1CreatePlaylistNotEnoughSongs()
     {
-        IPlaylist playlist = new Playlist("Test", db);
+        IPlaylist playlist = new Playlist("Test", _db);
         List<int> songlist = new List<int>();
         var ex = Assert.Catch<Exception>(() => playlist.AddSongs(songlist));
         
@@ -58,10 +58,10 @@ public class PlaylistTests
     [Test]
     public void Test1CreatePlaylistWithSqlInjection()
     {
-        db.InsertNewSong("test", "path");
-        IPlaylist playlist = new Playlist("Delete from songs;", db);
+        _db.InsertNewSong("test", "path");
+        IPlaylist playlist = new Playlist("Delete from songs;", _db);
         List<int> songlist = new List<int>();
-        songlist.Add(db.GetSongId("test"));
+        songlist.Add(_db.GetSongId("test"));
         playlist.AddSongs(songlist);
         
         Assert.IsNotEmpty(playlist.GetSongs(), "Injectia SQL a fost un succes!");
@@ -70,7 +70,7 @@ public class PlaylistTests
     [Test]
     public void Test1CreatePlaylistWithInexistentSongs()
     {
-        IPlaylist playlist = new Playlist("Test2", db);
+        IPlaylist playlist = new Playlist("Test2", _db);
         List<int> songlist = new List<int> { -1 };
         
         var ex = Assert.Catch<Exception>(() => playlist.AddSongs(songlist));
@@ -81,12 +81,12 @@ public class PlaylistTests
     [Test]
     public void Test2GetSonglist()
     {
-        db.InsertNewSong("test22", "path2");
+        _db.InsertNewSong("test22", "path2");
         
-        IPlaylist playlist = new Playlist("Test4", db);
+        IPlaylist playlist = new Playlist("Test4", _db);
         List<int> songlist = new List<int>();
         
-        songlist.Add(db.GetSongId("test22"));
+        songlist.Add(_db.GetSongId("test22"));
         playlist.AddSongs(songlist);
         
         List<int> results = playlist.GetSongs();
@@ -98,7 +98,7 @@ public class PlaylistTests
     [Test]
     public void Test2GetSonglistInvalidTitle()
     {
-        IPlaylist playlist = new Playlist("Test42", db);
+        IPlaylist playlist = new Playlist("Test42", _db);
         var ex = Assert.Catch<Exception>(() => playlist.GetSongs());
         
         Assert.That(ex, Is.TypeOf<Exception>());
@@ -107,8 +107,8 @@ public class PlaylistTests
     [Test]
     public void Test3DeletePlaylist()
     {
-        db.InsertNewSong("test", "path");
-        IPlaylist playlist1 = new Playlist("Test", db);
+        _db.InsertNewSong("test", "path");
+        IPlaylist playlist1 = new Playlist("Test", _db);
         List<int> songlist = new List<int> { 1 };
         
         playlist1.AddSongs(songlist);
@@ -119,7 +119,7 @@ public class PlaylistTests
     [Test]
     public void Test3DeleteInexistentPlaylist()
     {
-        IPlaylist playlist = new Playlist("Test3", db);
+        IPlaylist playlist = new Playlist("Test3", _db);
         var ex = Assert.Catch<Exception>(() => playlist.DeletePlaylist());
         
         Assert.That(ex, Is.TypeOf<Exception>());
