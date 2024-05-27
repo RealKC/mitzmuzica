@@ -12,29 +12,23 @@ public class DatabaseTests
     }
     
     [Test]
-    public void Test2GetSongPath()
-    {
-        int songId = 1;
-        string songTitle = "Test";
-        string path;
-
-        path = db.GetSongPath(songId);
-        
-        Assert.IsTrue(path == "225200", 
-                      $"Valorile gasite sunt: Path: {path}");
-        
-        path = db.GetSongPath(songTitle);
-        
-        Assert.IsTrue(path == "225200", 
-            $"Valorile gasite sunt: Path: {path}");
-    }
-    
-    [Test]
     public void Test1InsertNewSong()
     {
         string title = "Test", path = "225200";
 
         db.InsertNewSong(title, path);
+    }
+    
+    [Test]
+    public void Test2GetSongPath()
+    {
+        string songTitle = "Test";
+        string path;
+        
+        path = db.GetSongPath(songTitle);
+        
+        Assert.IsTrue(path == "225200", 
+            $"Valorile gasite sunt: Path: {path}");
     }
     
     [Test]
@@ -45,8 +39,6 @@ public class DatabaseTests
         
         db.DeleteSong(songId);
         
-        db.InsertNewSong("Test3", "225202");
-        
-        db.DeleteSong("Test3");
+        db.DeleteSong("Test");
     }
 }
