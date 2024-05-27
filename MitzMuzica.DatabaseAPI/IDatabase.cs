@@ -7,7 +7,6 @@
  *                                                                        *
  **************************************************************************/
 using System.Data.SQLite;
-using MitzMuzica.PluginAPI;
 
 namespace MitzMuzica.DatabaseAPI;
 
@@ -33,7 +32,7 @@ public interface IDatabase
     
     /// <summary>
     /// Inserts a new song in the database and retrieves its identifier.
-    /// Throws an sql exception if title/path is a duplicate or null.
+    /// If the title/path is a duplicate it will still behave normally.
     /// </summary>
     /// <param name="title">The title of the song.</param>
     /// <param name="path">The path of the song.</param>
@@ -42,7 +41,7 @@ public interface IDatabase
     
     /// <summary>
     /// Retrieves the file path of a song based on its identifier.
-    /// Throws an sql exception if the provided identifier doesn't exist.
+    /// Throws an exception if the provided identifier doesn't exist.
     /// </summary>
     /// <param name="songId">The identifier of the song.</param>
     /// <returns>The file path of the song.</returns>
@@ -50,7 +49,7 @@ public interface IDatabase
     
     /// <summary>
     /// Retrieves the file path of a song based on its title.
-    /// Throws an sql exception if the provided title doesn't exist.
+    /// Throws an exception if the provided title doesn't exist.
     /// </summary>
     /// <param name="title">The title of the song.</param>
     /// <returns>The file path of the song.</returns>
@@ -58,7 +57,7 @@ public interface IDatabase
     
     /// <summary>
     /// Retrieves the identifier of a song based on its title.
-    /// Throws an sql exception if the provided title doesn't exist.
+    /// Throws an exception if the provided title doesn't exist.
     /// </summary>
     /// <param name="title">The title of the song.</param>
     /// <returns>The identifier of the song.</returns>
@@ -66,7 +65,7 @@ public interface IDatabase
 
     /// <summary>
     /// Retrieves the title of a song based on its identifier.
-    /// Throws an SQL exception if the provided identifier doesn't exist.
+    /// Throws an exception if the provided identifier doesn't exist.
     /// </summary>
     /// <param name="songId">The identifier of the song.</param>
     /// <returns>The title of the song.</returns>
@@ -74,21 +73,21 @@ public interface IDatabase
     
     /// <summary>
     /// Deletes a song from the database based on its identifier.
-    /// Throws an sql exception if the provided identifier doesn't exist.
+    /// Throws an exception if the provided identifier doesn't exist.
     /// </summary>
     /// <param name="songId">The identifier of the song to be deleted.</param>
     public void DeleteSong(int songId);
 
     /// <summary>
     /// Deletes a song from the database based on its title.
-    /// Throws an sql exception if the provided title doesn't exist.
+    /// Throws an exception if the provided title doesn't exist.
     /// </summary>
     /// <param name="title">The title of the song to be deleted.</param>
     public void DeleteSong(string title);
     
     /// <summary>
     /// Inserts a new playlist into the database and retrieves its identifier.
-    /// Throws an sql exception if the provided name is a duplicate.
+    /// Throws an exception if the provided name is a duplicate.
     /// </summary>
     /// <param name="name">The name of the new playlist.</param>
     /// <param name="songIds">A list of song identifiers to be included in the new playlist.</param>
@@ -97,7 +96,7 @@ public interface IDatabase
     
     /// <summary>
     /// Retrieves the list of song identifiers in a playlist based on its identifier.
-    /// Throws an sql exception if the provided identifier doesn't exist.
+    /// Throws an exception if the provided identifier doesn't exist.
     /// </summary>
     /// <param name="playlistId">The identifier of the playlist.</param>
     /// <returns>A list of song identifiers in the specified playlist.</returns>
@@ -105,7 +104,7 @@ public interface IDatabase
     
     /// <summary>
     /// Retrieves the list of song identifiers in a playlist based on its name.
-    /// Throws an sql exception if the provided name doesn't exist.
+    /// Throws an exception if the provided name doesn't exist.
     /// </summary>
     /// <param name="name">The name of the playlist.</param>
     /// <returns>A list of song identifiers in the specified playlist.</returns>
@@ -113,7 +112,7 @@ public interface IDatabase
     
     /// <summary>
     /// Deletes a playlist from the database based on its name.
-    /// /// Throws an sql exception if the provided name doesn't exist.
+    /// /// Throws an exception if the provided name doesn't exist.
     /// </summary>
     /// <param name="name">The name of the playlist to be deleted.</param>
     public void DeletePlaylist(string name);
