@@ -22,6 +22,12 @@ public class PluginLoaderTests
     }
 
     [Fact]
+    public void CorrectPath()
+    {
+        Assert.Equal("Plugins", _pluginLoader.DirectoryPath);
+    }
+
+    [Fact]
     public void BasicBehaviour()
     {
         _pluginLoader.LoadPlugins();
