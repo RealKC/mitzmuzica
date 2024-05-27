@@ -1,4 +1,13 @@
-﻿using System.Data.SQLite;
+﻿/**************************************************************************
+ *                                                                        *
+ *  Description: Implementation of the IDatabase Interface                *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Petrisor Eduard-Gabriel                        *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+
+using System.Data.SQLite;
 using MitzMuzica.PluginAPI;
 
 namespace MitzMuzica.DatabaseAPI;
