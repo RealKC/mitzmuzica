@@ -41,7 +41,7 @@ public class PluginLoader
     /// </summary>
     public void LoadPlugins()
     {
-        var plugins = from file in Directory.EnumerateFiles(DirectoryPath, "*.dll", SearchOption.AllDirectories)
+        var plugins = from file in Directory.EnumerateFiles(DirectoryPath, "*.dll", SearchOption.TopDirectoryOnly)
             from type in LoadPlugin(Path.GetFullPath(file)).GetTypes()
             where typeof(IAudioPlugin).IsAssignableFrom(type)
             select Activator.CreateInstance(type) as IAudioPlugin;
