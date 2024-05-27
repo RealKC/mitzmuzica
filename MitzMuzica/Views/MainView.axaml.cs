@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
@@ -30,18 +33,19 @@ public partial class MainView : UserControl
     {
         if (DataContext is MainViewModel viewModel)
         {
-            TimePlayed.Content = x / 60 + ":" + x % 60;
+            string seconds = x % 60 < 10 ? "0" + x % 60 : (x % 60).ToString();
+            TimePlayed.Content = x / 60 + ":" + seconds;
             if (ProgressSlider.Value < 100)
             {
                 if (viewModel.IsPlaying)
                 {
                     ProgressSlider.Value++;
-                    x++;
+              
                 }
             }
         }
-
     }
+
     private void PlaylistBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (DataContext is MainViewModel viewModel)
@@ -88,6 +92,11 @@ public partial class MainView : UserControl
             viewModel.NowPlaying = 
                 "Now playing: " + viewModel.PlayingFile.Title + " by " + viewModel.PlayingFile.Author;
             viewModel.IsPlaying = true;
+            TimeSpan t = TimeSpan.FromMilliseconds(viewModel.PlayingFile.Length);
+            string secs = t.Seconds < 10 ? "0" + t.Seconds : t.Seconds.ToString();
+            SongLength.Content = t.Minutes + ":" + secs;
+            ProgressSlider.Maximum = t.TotalSeconds;
+            ProgressSlider.Value = 0;
         }
     }
 
@@ -128,6 +137,18 @@ public partial class MainView : UserControl
             viewModel.Playlists.Remove(last);
             viewModel.Playlists.Add(new MainViewModel.Playlist(PlaylistName.Text!, songs));
         
+        }
+    }
+
+    private void ProgressChanged(object? sender, PointerReleasedEventArgs pointerReleasedEventArgs)
+    {
+        if (DataContext is MainViewModel viewModel)
+        {
+            int y = (int)ProgressSlider.Value;
+            string seconds = y % 60 < 10 ? "0" + y % 60 : (y % 60).ToString();
+            TimePlayed.Content = y / 60 + ":" + seconds;
+            
+            viewModel.PlayingFile?.SeekTo((long)ProgressSlider.Value);
         }
     }
 }

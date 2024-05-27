@@ -23,10 +23,10 @@
         <Label DockPanel.Dock="Bottom" Content="{Binding NowPlaying}"></Label>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label x:Name="TimePlayed">0:00</Label>
-            <Slider Width="400" Minimum="0" Maximum="100" x:Name="ProgressSlider"></Slider>
+            <Slider Width="400" Minimum="0" Maximum="100" x:Name="ProgressSlider" PointerReleased="ProgressChanged"></Slider>
             <Label x:Name="SongLength">3:00</Label>
         </StackPanel>
-
+        
         
         <!-- Media Control Buttons --> 
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -72,36 +72,35 @@
         
         <!-- Music list popup -->
         <DockPanel x:Name="PlaylistContext" DockPanel.Dock="Left" HorizontalAlignment="Left" IsVisible="False">
-            <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                <StackPanel Orientation="Horizontal">
-                    <Label FontSize="20" FontWeight="Bold">Add a new song</Label>
-                    <Button Click="AddSong"> <avalonia:MaterialIcon Kind="Add"/></Button>
-                 
-                </StackPanel>
-          
-                <ListBox DockPanel.Dock="Left" ItemsSource="{Binding SelectedPlaylist.Songs}">
-                    <ListBox.ItemTemplate>
-                    
-                        <DataTemplate>
+            <ScrollViewer>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <Label FontSize="20" FontWeight="Bold">Add a new song</Label>
+                        <Button Click="AddSong"> <avalonia:MaterialIcon Kind="Add"/></Button>
+                    </StackPanel>
+                        <ListBox DockPanel.Dock="Left" ItemsSource="{Binding SelectedPlaylist.Songs}">
+                            <ListBox.ItemTemplate>
                         
-                            <DockPanel LastChildFill="False">
+                                <DataTemplate>
                             
-                                <Grid DockPanel.Dock="Left" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <StackPanel>
-                                        <Label Content="{Binding Title}" FontSize="18"></Label>
-                                        <Label Content="{Binding Path}" FontSize="12"></Label>
-                                    </StackPanel>
-                               
-                                </Grid>
-                                <Button DockPanel.Dock="Right" Click="PlaySong">
-                                    <avalonia:MaterialIcon Kind="Play"/>
-                                </Button>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                
-                </ListBox>
-            </StackPanel>
+                                    <DockPanel LastChildFill="False">
+                                
+                                        <Grid DockPanel.Dock="Left" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <StackPanel>
+                                                <Label Content="{Binding Title}" FontSize="18"></Label>
+                                                <Label Content="{Binding Path}" FontSize="12"></Label>
+                                            </StackPanel>
+                                   
+                                        </Grid>
+                                        <Button DockPanel.Dock="Right" Click="PlaySong">
+                                            <avalonia:MaterialIcon Kind="Play"/>
+                                        </Button>
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                </StackPanel>
+            </ScrollViewer>
             
             
         </DockPanel>

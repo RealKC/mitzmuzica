@@ -18,6 +18,7 @@
         x:Class="MitzMuzica.Views.HelpWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="HelpWindow">
+    
     <DockPanel>
         <mupdf:PDFRenderer Name="MuPDFRenderer" Background="White" Width="500" Height="500" ZoomEnabled="False" DockPanel.Dock="Top"/>
         <Button Click="PreviousPage_Click" DockPanel.Dock="Left">Previous Page</Button>
