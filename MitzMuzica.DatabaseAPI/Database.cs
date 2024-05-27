@@ -49,7 +49,7 @@ public sealed class Database : IDatabase
             {
                 command.ExecuteNonQuery();
             }
-            
+
             _connection.Close();
         }
         catch (SQLiteException ex)
@@ -58,7 +58,7 @@ public sealed class Database : IDatabase
         }
     }
 
-    public void EstablishConnection(string path)
+    private void EstablishConnection(string path)
     {
         _connection ??= new SQLiteConnection($"Data Source={path};foreign keys=true");
     }
@@ -154,7 +154,7 @@ public sealed class Database : IDatabase
         return path;
     }
     
-    public int GetSongID(string title)
+    public int GetSongId(string title)
     {
         int songId = 0;
         try
