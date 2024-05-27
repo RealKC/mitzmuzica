@@ -9,18 +9,17 @@ public sealed class Database : IDatabase
 
     public Database() { }
 
-    public void CreateDatabase()
+    public void CreateDatabase(string databasePath = @"..\..\..\..\MitzMuzica\Resources\playlistsDB.db")
     {
         try
         {
-            string path = "..\\..\\..\\..\\MitzMuzica\\Resources\\playlistsDB.db";
-            if (File.Exists(path))
+            if (File.Exists(databasePath))
             {
-                EstablishConnection(path);
+                EstablishConnection(databasePath);
                 return;
             }
-            SQLiteConnection.CreateFile(path);
-            EstablishConnection(path);
+            SQLiteConnection.CreateFile(databasePath);
+            EstablishConnection(databasePath);
             
             _connection.Open();
 

@@ -14,7 +14,8 @@ public interface IDatabase
     /// Creates the database if it doesn't exist already
     /// and establishes a connection to it, only establishes a connection otherwise.
     /// </summary>
-    public void CreateDatabase();
+    /// <param name="databasePath">Path to the database</param>
+    public void CreateDatabase(string databasePath);
     
     /// <summary>
     /// Establishes new a connection to the database if it doesn't exist.
