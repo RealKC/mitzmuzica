@@ -1,54 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
-using Avalonia.Data.Converters;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Material.Icons;
 using MitzMuzica.DatabaseAPI;
 using MitzMuzica.PluginAPI;
-using MitzMuzica.PluginLoader;
+
 namespace MitzMuzica.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
     public string Greeting => "Welcome to Avalonia!";
     private Playlist _selectedPlaylist;
+    [ObservableProperty] 
     private string _nowPlaying= "Now playing: nothing";
+    
     private PluginLoader.PluginLoader _pluginLoader = new PluginLoader.PluginLoader(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/plugins");
-    public string NowPlaying
-    {
-        get => _nowPlaying;
-        set => _nowPlaying = value ?? throw new ArgumentNullException(nameof(value));
-    }
-
+    public IAudioPlugin AudioPlugin;
+    public IAudioFile? PlayingFile = null;
+    
     public MainViewModel()
     {
-        
-        _db.CreateDatabase(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/testDB.db");
-        List<string> playlists = _db.GetPlaylistNames();
+        DB.CreateDatabase(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/testDB.db");
+        List<string> playlists = DB.GetPlaylistNames();
         foreach (var playlist in playlists)
         {
             List<Song> songs = [];
-            List<int> songIDs = _db.GetPlaylist(playlist);
+            List<int> songIDs = DB.GetPlaylist(playlist);
            
             foreach (var songID in songIDs)
             {
-                 songs.Add(new Song(_db.GetSongTitle(songID), _db.GetSongPath(songID)));
+                 songs.Add(new Song(DB.GetSongTitle(songID), DB.GetSongPath(songID)));
             }
             _playlistsTest.Add(new Playlist(playlist, songs));
         }
         Playlists = new ObservableCollection<Playlist>(_playlistsTest);
         _pluginLoader.LoadPlugins();
-        List<IAudioPlugin> test = _pluginLoader.AudioPlugins;
-        
-        Console.WriteLine(test);
+        AudioPlugin = _pluginLoader.AudioPlugins[0];
     }
 
-    private readonly Database _db = new Database();
+    public static readonly Database DB = new Database();
     private readonly List<Playlist> _playlistsTest = [];
 
     public class Song(string title, string path) //TODO replace this with AudioFile class
@@ -64,19 +56,31 @@ public partial class MainViewModel : ViewModelBase
             get => path;
             set => path = value;
         }
+
     }
 
     public class Playlist
     {
         private string _title;
+        private PlaylistAPI.Playlist _api;
+        
+        public PlaylistAPI.Playlist API
+        {
+            get => _api;
+            set => _api = value;
+        }
+
         private List<Song> _songs = [];
 
         public List<Song> Songs => _songs;
+        
+        
 
         public Playlist(string title, List<Song> songs)
         {
             _title = title;
             _songs = songs;
+            _api = new PlaylistAPI.Playlist(title, DB);
         }
 
         public string Title
@@ -84,8 +88,7 @@ public partial class MainViewModel : ViewModelBase
             get => _title;
             set => _title = value;
         }
-
-
+        
         public void Add(Song song)
         {
             _songs.Add(song);
@@ -125,5 +128,4 @@ public partial class MainViewModel : ViewModelBase
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Playlists)));
         }
     }
-
 }

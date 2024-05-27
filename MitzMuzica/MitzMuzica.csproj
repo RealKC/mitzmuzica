@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)"/>
+    <PackageReference Include="Avalonia" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Skia" Version="11.0.10" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
     <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)"/>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0"/>
@@ -28,7 +29,6 @@
     <Folder Include="Resources\" />
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)"/>
 
-
     <AvaloniaResource Include="Assets\**"/>
     <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)"/>
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
@@ -43,5 +43,22 @@
     <ProjectReference Include="..\MitzMuzica.DatabaseAPI\MitzMuzica.DatabaseAPI.csproj" />
     <ProjectReference Include="..\MitzMuzica.PlaylistAPI\MitzMuzica.PlaylistAPI.csproj" />
     <ProjectReference Include="..\MitzMuzica.PluginLoader\MitzMuzica.PluginLoader.csproj" />
+    <PackageReference Include="MuPDFCore" Version="1.9.0" />
+    <PackageReference Include="MuPDFCore.MuPDFRenderer" Version="1.9.0" />
+    <PackageReference Include="Avalonia" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Skia" Version="11.0.10" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="2.1.9" />
+    <PackageReference Include="MuPDFCore" Version="1.6.0" />
+    <PackageReference Include="MuPDFCore.MuPDFRenderer" Version="1.6.0" />
+  </ItemGroup>
+  
+
+  <ItemGroup>
+    <ProjectReference Include="..\MitzMuzica.DatabaseAPI\MitzMuzica.DatabaseAPI.csproj" />
+    <ProjectReference Include="..\MitzMuzica.PlaylistAPI\MitzMuzica.PlaylistAPI.csproj" />
+    <ProjectReference Include="..\MitzMuzica.PluginLoader\MitzMuzica.PluginLoader.csproj" />
+    <PackageReference Include="MuPDFCore" Version="1.9.0" />
+    <PackageReference Include="MuPDFCore.MuPDFRenderer" Version="1.9.0" />
   </ItemGroup>
 </Project>
