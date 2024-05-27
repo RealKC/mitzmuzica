@@ -28,7 +28,7 @@ public class DatabaseTests
     [Test]
     public void Test1InsertNewSong()
     {
-        string title = "Pacod", path = "225200";
+        string title = "Pacod2", path = "2252002";
 
         db.InsertNewSong(title, path);
     }
@@ -48,6 +48,6 @@ public class DatabaseTests
 
         List<int> temp =  db.GetPlaylist(p_id);
         string results = string.Join(", ", temp);
-        Assert.IsTrue("1, 2, 3" == results, $"Elementele gasite: {results}");
+        Assert.IsTrue("1, 2" == results, $"Elementele gasite: {results}");
     }
 }

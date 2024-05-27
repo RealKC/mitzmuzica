@@ -19,9 +19,9 @@ public interface IDatabase
     
     public void DeleteSong(int songId);
 
-    public int InsertNewPlaylist(string name, int[] songIds);
+    public int InsertNewPlaylist(string name, List<int> songIds);
 
     public List<int> GetPlaylist(int playlistId);
 
-    public void DeletePlaylist(int playlistId);
+    public void DeletePlaylist(string name);
 }
