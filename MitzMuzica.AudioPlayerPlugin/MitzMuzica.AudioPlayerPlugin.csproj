@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MitzMuzica.PluginAPI\MitzMuzica.PluginAPI.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="LibVLCSharp" Version="3.8.5" />
+      <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.20" />
+    </ItemGroup>
+
+</Project>
