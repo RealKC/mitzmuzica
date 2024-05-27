@@ -73,7 +73,7 @@
                             <Grid DockPanel.Dock="Left" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <StackPanel>
                                     <Label Content="{Binding Title}" FontSize="18"></Label>
-                                    <Label Content="{Binding Author}" FontSize="12"></Label>
+                                    <Label Content="{Binding Path}" FontSize="12"></Label>
                                 </StackPanel>
                                
                             </Grid>

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using Avalonia.Data.Converters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Material.Icons;
@@ -14,14 +16,27 @@ public partial class MainViewModel : ViewModelBase
 {
     public string Greeting => "Welcome to Avalonia!";
     private Playlist _selectedPlaylist;
-
+    
     public MainViewModel()
     {
         Playlists = new ObservableCollection<Playlist>(PlaylistsTest);
+        _db.CreateDatabase(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/testDB.db");
+        List<string> playlists = _db.GetPlaylistNames();
+        foreach (var playlist in playlists)
+        {
+            List<Song> songs = [];
+            List<int> songIDs = [];
+            songIDs = _db.GetPlaylist(playlist);
+            foreach (var songID in songIDs)
+            {
+                // songs.Add(new Song(_db.GetSongName(songID), _db.GetSongPath(songID)));
+            }
+            PlaylistsTest.Add(new Playlist(playlist, songs));
+            
+        }
     }
 
     private Database _db = new Database();
-    
     public List<Playlist> PlaylistsTest = new List<Playlist>
     {
         new Playlist("Manele", new List<Song>
@@ -49,7 +64,7 @@ public partial class MainViewModel : ViewModelBase
         }),
     };
 
-    public class Song(string title, string author) //TODO replace this with AudioFile class
+    public class Song(string title, string path) //TODO replace this with AudioFile class
     {
         public string Title
         {
@@ -57,10 +72,10 @@ public partial class MainViewModel : ViewModelBase
             set => title = value;
         }
 
-        public string Author
+        public string Path
         {
-            get => author;
-            set => author = value;
+            get => path;
+            set => path = value;
         }
     }
 

@@ -1,13 +1,4 @@
-﻿/**************************************************************************
- *                                                                        *
- *  Description: Implementation of the IDatabase Interface                *
- *  Website:     https://github.com/RealKC/mitzmuzica                     *
- *  Copyright:   (c) 2024, Petrisor Eduard-Gabriel                        *
- *  SPDX-License-Identifier: AGPL-3.0-only                                *
- *                                                                        *
- **************************************************************************/
-
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 using MitzMuzica.PluginAPI;
 
 namespace MitzMuzica.DatabaseAPI;
@@ -18,12 +9,11 @@ public sealed class Database : IDatabase
 
     public Database() { }
 
-    public void CreateDatabase(string databasePath)
+    public void CreateDatabase(string databasePath = @"..\..\..\..\MitzMuzica\Resources\playlistsDB.db")
     {
         try
         {
-            string path = "..\\..\\..\\..\\MitzMuzica\\Resources\\playlistsDB.db";
-            if (File.Exists(path))
+            if (File.Exists(databasePath))
             {
                 EstablishConnection(databasePath);
                 return;
@@ -348,6 +338,34 @@ public sealed class Database : IDatabase
                 command.ExecuteNonQuery();
             }
             _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public List<string> GetPlaylistNames()
+    {
+        try
+        {
+            List<string> result = new List<string>();
+            
+            _connection.Open();
+            string query = "SELECT name FROM playlists";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        result.Add(reader.GetString(reader.GetOrdinal("name")));
+                    }
+                }
+            }
+            _connection.Close();
+            return result;
         }
         catch (SQLiteException ex)
         {

@@ -1,12 +1,3 @@
-/**************************************************************************
- *                                                                        *
- *  Description: Unit Tests for the Database class                        *
- *  Website:     https://github.com/RealKC/mitzmuzica                     *
- *  Copyright:   (c) 2024, Petrisor Eduard-Gabriel                        *
- *  SPDX-License-Identifier: AGPL-3.0-only                                *
- *                                                                        *
- **************************************************************************/
-
 using System.Reflection;
 using MitzMuzica.DatabaseAPI;
 
@@ -15,6 +6,7 @@ namespace MitzMuzica.UnitTests;
 public class DatabaseTests
 {
     IDatabase db = new Database();
+    
     [SetUp]
     public void Setup()
     {
@@ -22,6 +14,14 @@ public class DatabaseTests
                           + "/testDB.db");
     }
     
+    [Test]
+    public void Test1InsertNewSong()
+    {
+        string title = "Test", path = "225200";
+
+        db.InsertNewSong(title, path);
+    }
+
     [Test]
     public void Test2GetSongPath()
     {
@@ -40,13 +40,6 @@ public class DatabaseTests
             $"Valorile gasite sunt: Path: {path}");
     }
     
-    [Test]
-    public void Test1InsertNewSong()
-    {
-        string title = "Test", path = "225200";
-
-        db.InsertNewSong(title, path);
-    }
     
     [Test]
     public void Test3DeleteSong()
@@ -56,8 +49,6 @@ public class DatabaseTests
         
         db.DeleteSong(songId);
         
-        db.InsertNewSong("Test3", "225202");
-        
-        db.DeleteSong("Test3");
+        db.DeleteSong("Test");
     }
 }
