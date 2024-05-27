@@ -74,10 +74,22 @@ public sealed class Database : IDatabase
     public int InsertNewSong(string title, string path)
     {
         int songId;
+        bool isOpen = true;
         try
         {
-            _connection.Open();
-            
+            while (isOpen)
+            {
+                try
+                {
+                    _connection.Open();
+                    isOpen = false;
+                }
+                catch (SQLiteException e)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+
             string query = "INSERT INTO songs(title, path) VALUES (@title, @path) RETURNING s_id";
 
             using (SQLiteCommand command = new SQLiteCommand(query, _connection))
@@ -189,6 +201,35 @@ public sealed class Database : IDatabase
         }
 
         return songId;
+    }
+    
+    public string GetSongTitle(int songId)
+    {
+        string songTitle = "";
+        try
+        {
+            _connection.Open();
+            string query = "SELECT * FROM songs WHERE s_id = @s_id";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                command.Parameters.AddWithValue("@s_id", songId);
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        songTitle = reader.GetString(reader.GetOrdinal("title"));
+                    }
+                }
+            }
+            _connection.Close();
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
+
+        return songTitle;
     }
 
     public void DeleteSong(int songId)

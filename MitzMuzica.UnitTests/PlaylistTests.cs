@@ -26,15 +26,6 @@ public class PlaylistTests
         db.CreateDatabase(testDatabasePath);
     }
     
-    [TearDown]
-    public void TearDown()
-    {
-        if (File.Exists(testDatabasePath))
-        {
-            File.Delete(testDatabasePath);
-        }
-    }
-    
 
     [Test]
     public void Test1CreatePlaylist()
@@ -71,8 +62,10 @@ public class PlaylistTests
     public void Test4GetSonglist()
     {
         db.InsertNewSong("test22", "path");
+        
         IPlaylist playlist = new Playlist("Test4", db);
         List<int> songlist = new List<int>();
+        
         songlist.Add(db.GetSongId("test22"));
         playlist.AddSongs(songlist);
         List<int> results = playlist.GetSongs();

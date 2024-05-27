@@ -63,6 +63,14 @@ public interface IDatabase
     /// <param name="title">The title of the song.</param>
     /// <returns>The identifier of the song.</returns>
     public int GetSongId(string title);
+
+    /// <summary>
+    /// Retrieves the title of a song based on its identifier.
+    /// Throws an SQL exception if the provided identifier doesn't exist.
+    /// </summary>
+    /// <param name="songId">The identifier of the song.</param>
+    /// <returns>The title of the song.</returns>
+    public string GetSongTitle(int songId);
     
     /// <summary>
     /// Deletes a song from the database based on its identifier.
