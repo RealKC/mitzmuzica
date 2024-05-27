@@ -42,6 +42,20 @@ public class DatabaseTests
     }
     
     [Test]
+    public void Test1InsertSongDuplicate()
+    {
+        string title = "Test", path = "225200";
+        int songId1 = 0, songId2 = 0;
+        
+        songId1 = _db.InsertNewSong(title, path);
+        
+        songId2 = _db.InsertNewSong(title, path);
+        
+        Assert.IsTrue(songId1 == songId2, "ID-urile ar fi trebuiet sa fie identice insa au fost:" +
+                                          $"/nID1:{songId1}/nID2:{songId2}");
+    }
+    
+    [Test]
     public void Test2GetSongPath()
     {
         string songTitle = "Test", path = "225200";

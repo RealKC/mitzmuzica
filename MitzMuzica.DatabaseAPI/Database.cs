@@ -92,13 +92,17 @@ public sealed class Database : IDatabase
                 command.Parameters.AddWithValue("@path", path);
                 songId = Convert.ToInt32(command.ExecuteScalar());
             }
-
         }
         catch (SQLiteException ex)
         {
+            if (_connection.State == ConnectionState.Open)
+            {
+                _connection.Close();
+            }
+            
             if (ex.Message.Contains("UNIQUE constraint failed"))
             {
-                throw new Exception($"\nValori duplicate!\nTitle: \"{title}\", Path: \"{path}\" exista deja in database");
+                songId =  GetSongId(title);
             }
             else
             {
