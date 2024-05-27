@@ -7,38 +7,32 @@ public class PlaylistTests
     [Test]
     public void Test1CreatePlaylist()
     {
-        IPlaylist playlist = new Playlist("bobi");
+        IPlaylist playlist = new Playlist("Test");
         List<int> songlist = new List<int>();
-        songlist.Add(3);
-        songlist.Add(4);
+        songlist.Add(1);
         playlist.AddSongs(songlist);
     }
     
     [Test]
     public void Test2GetSonglist()
     {
-        IPlaylist playlist = new Playlist("bobi2");
+        IPlaylist playlist = new Playlist("Test2");
         List<int> songlist = new List<int>();
-        songlist.Add(3);
-        songlist.Add(4);
+        songlist.Add(1);
         playlist.AddSongs(songlist);
+        List<int> results = playlist.GetSongs();
+        
+        Assert.IsTrue("1" == string.Join(", ", results), 
+            $"Elementele gasite: {results}");
     }
     
     [Test]
     public void Test3DeletePlaylist()
     {
-        IPlaylist playlist = new Playlist("bobi3");
-        playlist.DeletePlaylist();
-    }
-    
-    [Test]
-    public void Test4CascadeDeleteInQueue()
-    {
-        IPlaylist playlist = new Playlist("bobi4");
+        IPlaylist playlist = new Playlist("Test4");
         List<int> songlist = new List<int>();
-        songlist.Add(3);
+        songlist.Add(1);
         playlist.AddSongs(songlist);
         playlist.DeletePlaylist();
     }
-    
 }
