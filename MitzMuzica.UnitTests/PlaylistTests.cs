@@ -26,6 +26,14 @@ public class PlaylistTests
         db.CreateDatabase(testDatabasePath);
     }
     
+    [TearDown]
+    public void TearDown()
+    {
+        if (File.Exists(testDatabasePath))
+        {
+            File.Delete(testDatabasePath);
+        }
+    }
 
     [Test]
     public void Test1CreatePlaylist()
@@ -36,7 +44,7 @@ public class PlaylistTests
     }
     
     [Test]
-    public void Test2CreatePlaylistWithSqlInjection()
+    public void Test1CreatePlaylistWithSqlInjection()
     {
         db.InsertNewSong("test", "path");
         IPlaylist playlist = new Playlist("Delete from songs;", db);
@@ -48,7 +56,7 @@ public class PlaylistTests
     }
     
     [Test]
-    public void Test3CreatePlaylistWithInexistentSongs()
+    public void Test1CreatePlaylistWithInexistentSongs()
     {
         IPlaylist playlist = new Playlist("Test2", db);
         List<int> songlist = new List<int> { -1 };
@@ -59,9 +67,9 @@ public class PlaylistTests
     }
     
     [Test]
-    public void Test4GetSonglist()
+    public void Test2GetSonglist()
     {
-        db.InsertNewSong("test22", "path");
+        db.InsertNewSong("test22", "path2");
         
         IPlaylist playlist = new Playlist("Test4", db);
         List<int> songlist = new List<int>();
@@ -75,7 +83,7 @@ public class PlaylistTests
     }
     
     [Test]
-    public void Test5DeletePlaylist()
+    public void Test3DeletePlaylist()
     {
         IPlaylist playlist1 = new Playlist("Test", db);
         playlist1.DeletePlaylist();
