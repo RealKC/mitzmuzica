@@ -1,4 +1,12 @@
-﻿using System.Data.SQLite;
+﻿/**************************************************************************
+ *                                                                        *
+ *  Description: Interface for interacting with the database              *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Petrisor Eduard-Gabriel                        *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+using System.Data.SQLite;
 using MitzMuzica.PluginAPI;
 
 namespace MitzMuzica.DatabaseAPI;
@@ -14,7 +22,8 @@ public interface IDatabase
     /// Creates the database if it doesn't exist already
     /// and establishes a connection to it, only establishes a connection otherwise.
     /// </summary>
-    public void CreateDatabase();
+    /// <param name="databasePath">Path to the database.</param>
+    public void CreateDatabase(string databasePath);
     
     /// <summary>
     /// Establishes new a connection to the database if it doesn't exist.

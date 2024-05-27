@@ -38,4 +38,9 @@
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
     <PackageReference Include="Material.Icons.Avalonia" Version="2.1.9" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MitzMuzica.DatabaseAPI\MitzMuzica.DatabaseAPI.csproj" />
+    <ProjectReference Include="..\MitzMuzica.PlaylistAPI\MitzMuzica.PlaylistAPI.csproj" />
+  </ItemGroup>
 </Project>

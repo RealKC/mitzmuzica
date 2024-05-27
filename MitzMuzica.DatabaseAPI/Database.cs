@@ -1,4 +1,13 @@
-﻿using System.Data.SQLite;
+﻿/**************************************************************************
+ *                                                                        *
+ *  Description: Implementation of the IDatabase Interface                *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Petrisor Eduard-Gabriel                        *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+
+using System.Data.SQLite;
 using MitzMuzica.PluginAPI;
 
 namespace MitzMuzica.DatabaseAPI;
@@ -9,18 +18,18 @@ public sealed class Database : IDatabase
 
     public Database() { }
 
-    public void CreateDatabase()
+    public void CreateDatabase(string databasePath)
     {
         try
         {
             string path = "..\\..\\..\\..\\MitzMuzica\\Resources\\playlistsDB.db";
             if (File.Exists(path))
             {
-                EstablishConnection(path);
+                EstablishConnection(databasePath);
                 return;
             }
-            SQLiteConnection.CreateFile(path);
-            EstablishConnection(path);
+            SQLiteConnection.CreateFile(databasePath);
+            EstablishConnection(databasePath);
             
             _connection.Open();
 

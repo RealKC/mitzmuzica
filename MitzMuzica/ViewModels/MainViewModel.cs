@@ -6,6 +6,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Material.Icons;
+using MitzMuzica.DatabaseAPI;
 
 namespace MitzMuzica.ViewModels;
 
@@ -18,6 +19,9 @@ public partial class MainViewModel : ViewModelBase
     {
         Playlists = new ObservableCollection<Playlist>(PlaylistsTest);
     }
+
+    private Database _db = new Database();
+    
     public List<Playlist> PlaylistsTest = new List<Playlist>
     {
         new Playlist("Manele", new List<Song>

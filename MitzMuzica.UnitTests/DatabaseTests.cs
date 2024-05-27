@@ -1,3 +1,13 @@
+/**************************************************************************
+ *                                                                        *
+ *  Description: Unit Tests for the Database class                        *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Petrisor Eduard-Gabriel                        *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+
+using System.Reflection;
 using MitzMuzica.DatabaseAPI;
 
 namespace MitzMuzica.UnitTests;
@@ -8,7 +18,8 @@ public class DatabaseTests
     [SetUp]
     public void Setup()
     {
-        db.CreateDatabase();
+        db.CreateDatabase(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) 
+                          + "/testDB.db");
     }
     
     [Test]

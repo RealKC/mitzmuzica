@@ -1,4 +1,12 @@
-﻿namespace MitzMuzica.PlaylistAPI;
+﻿/**************************************************************************
+ *                                                                        *
+ *  Description: Interface for playlist interaction                       *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Petrisor Eduard-Gabriel                        *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+namespace MitzMuzica.PlaylistAPI;
 
 /// <summary>
 /// Interface used for playlist interaction.

@@ -17,7 +17,7 @@
     <DockPanel>
         <!-- <Image Width="50" Height="50" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Center" Source="../Assets/avalonia-logo.ico"></Image> -->
         <!-- Music Progress Bar -->
-
+            
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Label x:Name="TimePlayed">0:00</Label>
             <Slider Width="400" Minimum="0" Maximum="100" x:Name="ProgressSlider"></Slider>
