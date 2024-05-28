@@ -1,3 +1,13 @@
+<!--**********************************************************************
+*                                                                        *
+*  Description: Main view UI definition                                  *
+*  Website:     https://github.com/RealKC/mitzmuzica                     *
+*  Copyright:   (c) 2024, Mihalache Mihai                                *
+*  SPDX-License-Identifier: AGPL-3.0-only                                *
+*                                                                        *
+**************************************************************************-->
+
+
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
