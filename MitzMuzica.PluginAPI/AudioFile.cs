@@ -1,3 +1,12 @@
+/**************************************************************************
+ *                                                                        *
+ *  Description: Interface that describes an audio file                   *
+ *  Website:     https://github.com/RealKC/mitzmuzica                     *
+ *  Copyright:   (c) 2024, Mițca Dumitru                                  *
+ *  SPDX-License-Identifier: AGPL-3.0-only                                *
+ *                                                                        *
+ **************************************************************************/
+
 namespace MitzMuzica.PluginAPI;
 
 /// <summary>
