@@ -58,7 +58,7 @@ public partial class HelpWindow : Window
 
     private void UpdatePdf()
     {
-        _pdfRenderer.Initialize(_pdfContent, InputFileTypes.PDF, 1, _pageNumber);
+        _pdfRenderer.Initialize(_pdfContent, InputFileTypes.PDF, 1, _pageNumber, 1.5);
     }
 }
 

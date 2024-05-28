@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using MitzMuzica.PlaylistAPI;
-using MitzMuzica.PluginAPI;
 using MitzMuzica.ViewModels;
 
 namespace MitzMuzica.Views;
 
 public partial class MainView : UserControl
 {
-    DispatcherTimer timer;
-    private int x = 0;
+    private readonly DispatcherTimer timer;
+    private readonly int x = 0;
+
     public MainView()
     {
         InitializeComponent();
@@ -29,18 +25,23 @@ public partial class MainView : UserControl
         timer.Start();
         PlaylistBox.SelectionChanged += PlaylistBox_SelectionChanged;
     }
+
+    public static FilePickerFileType AudioAll { get; } = new("All audio file")
+    {
+        Patterns = new[] { "*.mp3", "*.aac", "*.wav", "*.flac" }, MimeTypes = new[] { "audio/*" }
+    };
+
     private void Timer_Tick(object sender, EventArgs e)
     {
         if (DataContext is MainViewModel viewModel)
         {
-            string seconds = x % 60 < 10 ? "0" + x % 60 : (x % 60).ToString();
-            TimePlayed.Content = x / 60 + ":" + seconds;
+            var seconds = x % 60 < 10 ? "0" + (x % 60) : (x % 60).ToString();
+            TimePlayed.Content = (x / 60) + ":" + seconds;
             if (ProgressSlider.Value < 100)
             {
                 if (viewModel.IsPlaying)
                 {
                     ProgressSlider.Value++;
-              
                 }
             }
         }
@@ -66,34 +67,36 @@ public partial class MainView : UserControl
     {
         if (DataContext is MainViewModel viewModel)
         {
-          
             if (viewModel.PlayingFile != null)
             {
-                if(viewModel.IsPlaying)
+                if (viewModel.IsPlaying)
+                {
                     viewModel.PlayingFile.Stop();
+                }
                 else
                 {
                     viewModel.PlayingFile.Start();
                 }
             }
+
             viewModel.IsPlaying = !viewModel.IsPlaying;
         }
     }
 
     private void PlaySong(object? sender, RoutedEventArgs e)
     {
-        MainViewModel.Song selectedSong = (sender as Button).DataContext as MainViewModel.Song;
+        var selectedSong = (sender as Button).DataContext as MainViewModel.Song;
         if (DataContext is MainViewModel viewModel)
         {
-            IAudioFile file = viewModel.AudioPlugin.Open(selectedSong.Path);
+            var file = viewModel.AudioPlugin.Open(selectedSong.Path);
 
             viewModel.PlayingFile = file;
             viewModel.PlayingFile.Start();
-            viewModel.NowPlaying = 
+            viewModel.NowPlaying =
                 "Now playing: " + viewModel.PlayingFile.Title + " by " + viewModel.PlayingFile.Author;
             viewModel.IsPlaying = true;
-            TimeSpan t = TimeSpan.FromMilliseconds(viewModel.PlayingFile.Length);
-            string secs = t.Seconds < 10 ? "0" + t.Seconds : t.Seconds.ToString();
+            var t = TimeSpan.FromMilliseconds(viewModel.PlayingFile.Length);
+            var secs = t.Seconds < 10 ? "0" + t.Seconds : t.Seconds.ToString();
             SongLength.Content = t.Minutes + ":" + secs;
             ProgressSlider.Maximum = t.TotalSeconds;
             ProgressSlider.Value = 0;
@@ -107,17 +110,13 @@ public partial class MainView : UserControl
             viewModel.Playlists.Add(new MainViewModel.Playlist(PlaylistName.Text!, []));
         }
     }
-    public static FilePickerFileType AudioAll { get; } = new("All audio file")
-    {
-        Patterns = new[] { "*.mp3", "*.aac", "*.wav", "*.flac"},
-        MimeTypes = new[] { "audio/*" }
-    };
+
     private async void AddSong(object? sender, RoutedEventArgs e)
     {
         if (DataContext is MainViewModel viewModel)
         {
             var topLevel = TopLevel.GetTopLevel(this);
-            var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+            var files = await topLevel!.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
                 Title = "Choose one or more songs to add to the playlist",
                 AllowMultiple = true,
@@ -129,14 +128,16 @@ public partial class MainView : UserControl
             foreach (var file in files)
             {
                 var song = viewModel.AudioPlugin.Open(file.Path.AbsolutePath);
-                songIds.Add(MainViewModel.DB.InsertNewSong(WebUtility.UrlDecode(song.Title), WebUtility.UrlDecode(file.Path.AbsolutePath)));
-                songs.Add(new MainViewModel.Song(WebUtility.UrlDecode(song.Title), WebUtility.UrlDecode(file.Path.AbsolutePath)));
+                songIds.Add(MainViewModel.DB.InsertNewSong(WebUtility.UrlDecode(song.Title),
+                    WebUtility.UrlDecode(file.Path.AbsolutePath)));
+                songs.Add(new MainViewModel.Song(WebUtility.UrlDecode(song.Title),
+                    WebUtility.UrlDecode(file.Path.AbsolutePath)));
             }
+
             MainViewModel.DB.InsertNewPlaylist(PlaylistName.Text!, songIds);
             var last = viewModel.Playlists.Last();
             viewModel.Playlists.Remove(last);
             viewModel.Playlists.Add(new MainViewModel.Playlist(PlaylistName.Text!, songs));
-        
         }
     }
 
@@ -144,13 +145,17 @@ public partial class MainView : UserControl
     {
         if (DataContext is MainViewModel viewModel)
         {
-            int y = (int)ProgressSlider.Value;
-            string seconds = y % 60 < 10 ? "0" + y % 60 : (y % 60).ToString();
-            TimePlayed.Content = y / 60 + ":" + seconds;
-            
+            var y = (int)ProgressSlider.Value;
+            var seconds = y % 60 < 10 ? "0" + (y % 60) : (y % 60).ToString();
+            TimePlayed.Content = (y / 60) + ":" + seconds;
+
             //viewModel.PlayingFile?.SeekTo((long)ProgressSlider.Value);
         }
     }
+
+    private void Help_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var helpWindow = new HelpWindow();
+        helpWindow.Show();
+    }
 }
-
-

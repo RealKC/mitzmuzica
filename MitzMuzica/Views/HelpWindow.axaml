@@ -8,19 +8,23 @@
  ***********************************************************************-->
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:MitzMuzica.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:MitzMuzica.Views"
         xmlns:mupdf="clr-namespace:MuPDFCore.MuPDFRenderer;assembly=MuPDFCore.MuPDFRenderer"
         Opened="WindowOpened"
         mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="550"
         x:Class="MitzMuzica.Views.HelpWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="HelpWindow">
-    
+        Title="HelpWindow"
+        Width="500" Height="550">
+
     <DockPanel>
-        <mupdf:PDFRenderer Name="MuPDFRenderer" Background="White" Width="500" Height="500" ZoomEnabled="False" DockPanel.Dock="Top"/>
+        <mupdf:PDFRenderer
+            Name="MuPDFRenderer"
+            Background="White"
+            Width="500" Height="500"
+            ZoomEnabled="False"
+            DockPanel.Dock="Top" />
         <Button Click="PreviousPage_Click" DockPanel.Dock="Left">Previous Page</Button>
         <Button Click="NextPage_Click" DockPanel.Dock="Right">Next Page</Button>
     </DockPanel>
