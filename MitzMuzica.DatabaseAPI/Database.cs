@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
  *                                                                        *
  *  Description: Implementation of the IDatabase Interface                *
  *  Website:     https://github.com/RealKC/mitzmuzica                     *
@@ -485,5 +485,33 @@ public sealed class Database : IDatabase
         }
         if (affectedRows == 0)
             throw new Exception("Provided title does not exist!");
+    }
+
+    public List<string> GetPlaylistNames()
+    {
+        try
+        {
+            List<string> result = new List<string>();
+            
+            _connection.Open();
+            string query = "SELECT name FROM playlists";
+
+            using (SQLiteCommand command = new SQLiteCommand(query, _connection))
+            {
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        result.Add(reader.GetString(reader.GetOrdinal("name")));
+                    }
+                }
+            }
+            _connection.Close();
+            return result;
+        }
+        catch (SQLiteException ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 }

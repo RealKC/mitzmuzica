@@ -6,21 +6,25 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
-
   <ItemGroup>
+    <Folder Include="Resources\" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)"/>
+
     <AvaloniaResource Include="Assets\**"/>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.0.10" />
-    <PackageReference Include="Avalonia.Skia" Version="11.0.10" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
     <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)"/>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0"/>
+  </ItemGroup>
 
-    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)"/>
+  <ItemGroup>
+    <ProjectReference Include="..\MitzMuzica.DatabaseAPI\MitzMuzica.DatabaseAPI.csproj" />
+    <ProjectReference Include="..\MitzMuzica.PlaylistAPI\MitzMuzica.PlaylistAPI.csproj" />
+    <ProjectReference Include="..\MitzMuzica.PluginLoader\MitzMuzica.PluginLoader.csproj" />
     <PackageReference Include="MuPDFCore" Version="1.9.0" />
     <PackageReference Include="MuPDFCore.MuPDFRenderer" Version="1.9.0" />
+    <PackageReference Include="Avalonia" Version="11.0.10" />
+    <PackageReference Include="Avalonia.Skia" Version="11.0.10" />
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="2.1.9" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿/**************************************************************************
+/**************************************************************************
  *                                                                        *
  *  Description: Interface for interacting with the database              *
  *  Website:     https://github.com/RealKC/mitzmuzica                     *

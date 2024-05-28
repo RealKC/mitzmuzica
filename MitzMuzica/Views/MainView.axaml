@@ -1,16 +1,121 @@
+<!--**********************************************************************
+*                                                                        *
+*  Description: Main view UI definition                                  *
+*  Website:     https://github.com/RealKC/mitzmuzica                     *
+*  Copyright:   (c) 2024, Mihalache Mihai                                *
+*  SPDX-License-Identifier: AGPL-3.0-only                                *
+*                                                                        *
+**************************************************************************-->
+
+
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:MitzMuzica.ViewModels"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="MitzMuzica.Views.MainView"
              x:DataType="vm:MainViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
-  </Design.DataContext>
+    <UserControl.Resources>
+        <vm:PlayPauseConverter x:Key="PlayPauseConverter" />
+    </UserControl.Resources>
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+    <DockPanel>
+        <!-- <Image Width="50" Height="50" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Center" Source="../Assets/avalonia-logo.ico"></Image> -->
+        <!-- Music Progress Bar -->
+        <StackPanel Orientation="Horizontal" />
+        <Label DockPanel.Dock="Bottom" Content="{Binding NowPlaying}" />
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <Label x:Name="TimePlayed">0:00</Label>
+            <Slider Width="400" Minimum="0" Maximum="100" x:Name="ProgressSlider" ValueChanged="ProgressChanged" />
+            <Label x:Name="SongLength">3:00</Label>
+        </StackPanel>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <!-- Media Control Buttons -->
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <Button Click="TogglePlayState">
+                <avalonia:MaterialIcon Kind="{Binding Converter={StaticResource PlayPauseConverter}, Path=IsPlaying}" />
+            </Button>
+        </StackPanel>
+
+        <!-- Playlists Section -->
+        <ScrollViewer>
+            <StackPanel DockPanel.Dock="Left" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Label x:Name="PlaylistLabel" FontSize="26" FontWeight="Bold">Playlists</Label>
+                    <TextBox Watermark="Playlist name" x:Name="PlaylistName" />
+                    <Button Click="AddPlaylist">
+                        <avalonia:MaterialIcon Kind="Add" />
+                    </Button>
+                </StackPanel>
+
+                <ListBox x:Name="PlaylistBox" Width="300" ItemsSource="{Binding Playlists}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel LastChildFill="False">
+                                <Grid DockPanel.Dock="Left" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Label Content="{Binding Title}" />
+                                </Grid>
+                                <Button DockPanel.Dock="Right">
+                                    <avalonia:MaterialIcon Kind="Play" />
+                                </Button>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Controls Section -->
+        <StackPanel DockPanel.Dock="Right" Orientation="Vertical" HorizontalAlignment="Right">
+            <Button Click="Help_OnClick">
+                <avalonia:MaterialIcon Kind="Help" />
+            </Button>
+        </StackPanel>
+
+        <!-- Music list popup -->
+        <DockPanel x:Name="PlaylistContext" DockPanel.Dock="Left" HorizontalAlignment="Left" IsVisible="False">
+            <ScrollViewer>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <Label FontSize="20" FontWeight="Bold">Add a new song</Label>
+                        <Button Click="AddSong">
+                            <avalonia:MaterialIcon Kind="Add" />
+                        </Button>
+                    </StackPanel>
+                    <ListBox DockPanel.Dock="Left" ItemsSource="{Binding SelectedPlaylist.Songs}">
+                        <ListBox.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <DockPanel LastChildFill="False">
+
+                                    <Grid DockPanel.Dock="Left" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <StackPanel>
+                                            <Label Content="{Binding Title}" FontSize="18" />
+                                            <Label Content="{Binding Path}" FontSize="12" />
+                                        </StackPanel>
+
+                                    </Grid>
+                                    <Button DockPanel.Dock="Right" Click="PlaySong">
+                                        <avalonia:MaterialIcon Kind="Play" />
+                                    </Button>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </ScrollViewer>
+
+
+        </DockPanel>
+
+    </DockPanel>
 </UserControl>
