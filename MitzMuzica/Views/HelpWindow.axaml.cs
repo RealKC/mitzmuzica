@@ -59,6 +59,7 @@ public partial class HelpWindow : Window
     private void UpdatePdf()
     {
         _pdfRenderer.Initialize(_pdfContent, InputFileTypes.PDF, 1, _pageNumber, 1.5);
+        _pdfRenderer.Zoom = 0.75;
     }
 }
 
